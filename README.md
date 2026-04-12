@@ -101,4 +101,4 @@ Daniel Radicchi — `github.com/dradicchi`
 
 For audit inquiries: open an issue on this repository.
 
-For business inquiries: (to be updated when Polya Technologies legal entity is incorporated).
+For business inquiries: dradicchi at gmail.com

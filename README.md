@@ -33,38 +33,20 @@ The three models operate over a single shared capital pot of **9.6 BTC** (the "F
 
 ---
 
-## Strategy rules (frozen)
+## Strategy rules
 
-The operational rules were frozen on **2026-04-12** in the internal document `plano-v1.md` before the go-live. They are documented here in full because a frozen ruleset is the only way to claim an out-of-sample test — any change mid-period would invalidate the OOS property.
+The complete operational ruleset (entry criteria, exit logic, position sizing, stopping rules) was frozen on **2026-04-12** in an internal document before the go-live. The rules are proprietary and are **not published** in this repository.
 
-### Entry — all conditions must hold (AND)
+What can be stated publicly:
 
-1. Instrument has a valid scoring snapshot for the day
-2. Internal model signal above the 12% threshold for its t-bucket
-3. OTM: `x = S/K < 1.00` (monthly/daily) or `x < 0.90` (weekly)
-4. Time to expiry within horizon bounds
-5. One of the top-3 candidates by internal deviation within the t-bucket
-6. No open position in the same instrument for the same horizon
-7. Capital pot has at least the initial margin required for the new contract
+- **Positions are short CALL only** (the strategy collects option premium). This is directly observable from the events.
+- **Sizing is 1 contract per signal**, invariant across all three horizons. This is directly observable from the events.
+- **Capital pot is 9.6 BTC.** Entries are rejected when the pot is fully committed (logged as `rejected_no_capital` events).
+- **Exit rules are deterministic and rule-based** — no discretionary exits. The specific exit logic is proprietary, but the realized execution (entry price, exit price, exit reason, P&L) is fully logged and verifiable.
+- **Stopping rules exist** and are monitored automatically. If triggered, a `pause` event is logged publicly with the affected horizon.
+- **Rules are frozen for the duration of the test** (minimum 90 days). Any mid-period rule change would invalidate the out-of-sample claim and would be disclosed as a `correction` event in the log.
 
-### Exit — evaluated in order of precedence
-
-1. **Alpha-exit:** when the live `best_ask` of the instrument drops to or below 10% of the entry price, close the position at `best_ask`. This is the canonical rule for systematic short-vol strategies: once 90% of the premium has decayed, the remaining 10% does not compensate for the reversion risk of holding.
-2. **Expiry guard:** within `EXPIRY_GUARD` days of settlement (0.3d daily, 1d weekly, 3d monthly) AND `x ≥ 1.00`, close at `best_ask` to avoid ITM delivery.
-3. **Natural expiry:** if no earlier rule triggered, the position is closed at Deribit settlement price on expiration day. OTM at settlement pays zero (full premium retained); ITM (shouldn't happen under rule 2) realizes intrinsic value.
-
-### Sizing
-
-- 1 contract per signal, invariant, in all three horizons.
-- This is the Kelly-optimal size for the discrete win/loss structure of the strategy in our backtest regime. The simulation is not about scale — it's about correctness of the forward execution.
-
-### Stopping rules
-
-If any of the following trigger for a horizon, that horizon is paused and a `pause` event is recorded. Re-entry requires an explicit `resume` event:
-
-- Cumulative drawdown exceeds 5× the maximum observed in backtest (thresholds per horizon)
-- Rolling 30-day RMSE of the scoring model exceeds 1.5× its benchmark for 14 consecutive days
-- Rolling 30-day win rate falls below 60%
+The audit question is not "are the rules good?" — it is "given the rules (whatever they are), does the recorded track record accurately reflect what the strategy produced in forward, out-of-sample conditions?". That question is fully answerable from this repository.
 
 ---
 

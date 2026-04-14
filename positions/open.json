@@ -466,5 +466,14 @@
     "exec_btc": 0.0002,
     "im_btc": 0.1,
     "exit_target_btc": 2e-05
+  },
+  {
+    "event_id": "d1f9e3da58cf557d",
+    "horizon": "weekly",
+    "instrument": "BTC-16APR26-80000-C",
+    "ts_entry": "2026-04-14T11:09:05.930Z",
+    "exec_btc": 0.0003,
+    "im_btc": 0.1,
+    "exit_target_btc": 2.9999999999999997e-05
   }
 ]

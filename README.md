@@ -41,7 +41,7 @@ What can be stated publicly:
 
 - **Positions are short CALL only** (the strategy collects option premium). This is directly observable from the events.
 - **Sizing is 1 contract per signal**, invariant across all three horizons. This is directly observable from the events.
-- **Capital pot is 9.6 BTC.** Entries are rejected when the pot is fully committed (logged as `rejected_no_capital` events).
+- **Capital pot is 20 BTC** (resized from 9.6 BTC on 2026-04-15 — see `DISCLOSURES.md`). Entries are rejected when the pot is fully committed (logged as `rejected_no_capital` events).
 - **Exit rules are deterministic and rule-based** — no discretionary exits. The specific exit logic is proprietary, but the realized execution (entry price, exit price, exit reason, P&L) is fully logged and verifiable.
 - **Stopping rules exist** and are monitored automatically. If triggered, a `pause` event is logged publicly with the affected horizon.
 - **Rules are frozen for the duration of the test** (minimum 90 days). Any mid-period rule change would invalidate the out-of-sample claim and would be disclosed as a `correction` event in the log.
@@ -81,6 +81,22 @@ polya-papertrading-log/
 - **Signing format:** Git SSH signing (native support since Git 2.34). Run `git log --show-signature` to see `Good "git" signature for ...` for every commit.
 - **Git hook policy:** no force-push to `main`, no rewriting of published commits. A policy cannot be enforced technically without GitHub branch protection (which is a paid feature); instead, we rely on the clone-once-verify-later discipline: any party that clones this repo at any point has a local copy whose hashes must match any future re-clone. Divergence is detectable.
 - **Blockchain anchoring:** `events.jsonl.ots` is an OpenTimestamps proof that the hash of `events.jsonl` at a given commit existed on or before a specific moment in time, as confirmed by inclusion in a Bitcoin block. See `VERIFY.md` for the command to verify it.
+
+---
+
+## Methodological corrections
+
+This log is preserved as-is. Methodological gaps detected during the
+run are documented transparently in [`DISCLOSURES.md`](DISCLOSURES.md)
+rather than retroactively edited in `events.jsonl`.
+
+**Active disclosure (2026-04-15, session 48):** universe alignment
+between the paper trader and the canonical backtest. ~87 entries in
+the window 2026-04-13 21:41 UTC → 2026-04-15 22:00 UTC were affected
+by four progressively tightened gaps (B183/B184/B186/B188). Realized
+P&L unaffected (all closed trades pre-fix were correctly classified).
+Open positions were not manually closed. Future entries operate under
+the canonical universe. See `DISCLOSURES.md` for the full audit trail.
 
 ---
 

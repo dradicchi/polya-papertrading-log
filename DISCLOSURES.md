@@ -173,3 +173,78 @@ summing the `im_btc` field of all open positions and adding the
 event (if any). The resize from 9.6 → 20 BTC will be visible as a
 discontinuity in the maximum committed initial margin around
 2026-04-15.
+
+---
+
+## 2026-04-16 (session 50): Minimum bid filter
+
+### Affected window
+
+- **Start:** 2026-04-13 21:41 UTC (first entry of paper trading v2)
+- **End:** 2026-04-16 ~01:30 UTC (fix deployed)
+- **Affected entries:** 2 daily entries with bid < 0.0003 BTC
+
+### What was wrong, in plain language
+
+The paper trader entered positions where the option premium received
+(the bid price) was so small that the exchange's fixed trading fees
+consumed all the possible profit. These trades were **guaranteed to
+lose money from the moment they were opened**, regardless of how
+favorably the underlying moved.
+
+The issue arises because Deribit charges a fixed fee of 0.0001 BTC
+per leg (entry + exit = 0.0002 BTC minimum). When the strategy's
+exit rule captures ~90% of the entry premium, a trade with a bid of
+0.0003 BTC produces a gross profit of ~0.00027 BTC — which is barely
+above the fixed fees and does not cover the additional spread cost
+(L2). Below approximately 0.00022 BTC bid, the trade is structurally
+unprofitable even with perfect execution.
+
+The backtest does not exhibit this problem because it simulates
+execution at the mark price (the option's mid-market theoretical
+value) and accounts for the bid-ask spread as a separate cost line.
+In the live market, the bid (what the seller actually receives) can
+be 30–50% lower than the mark for deep out-of-the-money options near
+expiry — a gap that the backtest's cost model does not generate at
+the individual trade level.
+
+### Quantification
+
+Of 108 entries in the affected window:
+
+- **2 entries** had bid prices below the new threshold (0.0003 BTC):
+  - `BTC-15APR26-78000-C` (daily): bid=0.0003, mark=0.000609,
+    PnL gross=+0.000271, costs=0.000509, **PnL net=−0.000238 BTC**
+  - `BTC-16APR26-79000-C` (daily): bid=0.0005, mark=0.000761,
+    PnL gross=+0.000452, costs=0.000461, **PnL net=−0.000009 BTC**
+- Both trades were closed via alpha-exit with **positive gross P&L**
+  but **negative net P&L** after costs.
+- Combined net loss: −0.000247 BTC (0.6% of total realized P&L).
+
+### Fix applied
+
+A minimum bid filter (`BID_MIN_BTC = 0.0003`) was added to the entry
+logic. Trades with a bid price below this threshold are silently
+rejected before execution. The threshold is ~35% above the
+theoretical break-even (0.00022 BTC) to provide a margin of safety.
+
+This filter is an **operational safeguard** specific to the paper
+trader (and future production systems). It does not exist in the
+backtest, which uses a different execution model. It applies equally
+to all three horizons (monthly, weekly, daily), though in practice
+it only binds for daily contracts — monthly and weekly options
+typically have bid prices well above the threshold.
+
+### Going forward
+
+All entries from 2026-04-16 ~01:30 UTC onward are subject to the
+minimum bid filter. Contracts with insufficient premium to cover
+fixed execution costs will not be entered.
+
+### How to verify
+
+The two affected trades are visible in `events.jsonl` as `entry` +
+`exit` event pairs with the instruments listed above. Their
+`exec_btc` field (= bid at entry) is below 0.001 BTC, and their
+exit events show negative `pnl_net_btc`. No future entries should
+have `exec_btc` below 0.0003 BTC.

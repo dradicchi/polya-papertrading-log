@@ -3,3 +3,7 @@ sessions/.DS_Store
 .DS_Store
 __pycache__/
 *.pyc
+
+# API response archive — local only, not published.
+# Auditors can request access for price verification against Tardis.dev.
+api_archive/

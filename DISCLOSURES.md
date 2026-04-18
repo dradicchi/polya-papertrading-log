@@ -248,3 +248,146 @@ The two affected trades are visible in `events.jsonl` as `entry` +
 `exec_btc` field (= bid at entry) is below 0.001 BTC, and their
 exit events show negative `pnl_net_btc`. No future entries should
 have `exec_btc` below 0.0003 BTC.
+
+---
+
+## 2026-04-18 (session 54): Daily entry cap per bucket
+
+### Affected window
+
+- **Start:** 2026-04-13 21:41 UTC (first entry of paper trading v2)
+- **End:** 2026-04-18 (fix deployed; exact UTC timestamp visible in
+  the commit that introduces the `rejected_daily_cap` event type)
+- **Affected entries:** 95 of 159 entries in the window (~60%) were
+  entries in excess of the cap that the canonical backtest applies
+  per UTC day per t-bucket per horizon. Count measured at 2026-04-17
+  22:00 UTC; the final number at cutover may shift by a handful of
+  entries added in the intervening cycles.
+
+### What was wrong, in plain language
+
+The published track record comes from a backtest in which only one
+decision window per UTC day exists: the strategy looks at the universe
+once, ranks the eligible contracts inside each (horizon × time-to-expiry
+bucket), and enters the top candidates of that single ranking. This
+implicitly caps the number of new entries per day per bucket at the
+strategy's selectivity parameter.
+
+The paper trader, by contrast, runs every minute (1,440 cycles per UTC
+day). Each cycle independently selects its top candidates from the
+candidates eligible *at that minute*. Without an explicit daily cap,
+the same bucket could absorb many more new entries over the course of
+a day than the backtest ever would. In particular, when the underlying
+moves and a fresh wave of contracts becomes eligible, multiple cycles
+in a row can each add new positions to the same bucket — far above the
+selectivity that the backtest enforces by construction.
+
+The consequence is *capital dilution*, not bad picks. Every individual
+entry was eligible under the strategy's signal rule; the issue is that
+**aggregating dozens of entries per bucket per day inflated the peak
+simultaneous initial margin (peak IM)** by roughly 2–4× versus what the
+canonical backtest would consume in the same regime. ROI = PnL / AUM
+falls when the denominator inflates, even if the numerator (PnL per
+trade) stays roughly the same.
+
+The pricing of every individual contract was correct. The selection
+criterion of every individual entry was correct. The miss was a
+capacity-control rule that exists implicitly in the backtest (because
+it has only one decision window per day) but had not been ported
+explicitly to the multi-cycle paper trader.
+
+### Quantification
+
+Of 159 entries in the affected window:
+
+- **64 entries (~40%)** would have been admitted under the cap as well
+  — these are within the per-day per-bucket selectivity that the
+  backtest enforces.
+- **95 entries (~60%)** were in excess of that cap.
+- The excess concentrates in the daily horizon's `long` bucket: a
+  single UTC day saw 21 entries in that one bucket alone.
+
+The excess entries were all real positions priced from real market
+quotes. Their realized P&L is recorded in `events.jsonl` and is
+included in every reported performance metric for the affected window.
+**No revisions are made to the existing log.**
+
+### Fix applied
+
+A daily cap on new entries per (horizon, t-bucket, UTC day) was added
+to the entry logic. The cap is keyed off the same single source of
+truth used by the backtest: a single configuration table that both the
+backtest scripts and the paper trader import. The backtest file
+contains an `assert` that fails at import time if the cap value
+diverges from the backtest's per-day selectivity — preventing future
+silent drift between the two pipelines.
+
+The cap is **bucket-scoped and horizon-scoped** — three separate
+counters per UTC day:
+
+- monthly × {short, medium, long}
+- weekly × {short, medium, long}
+- daily × {short, medium, long}
+
+Each counter is independent. Reaching the cap in one bucket does not
+affect any other bucket or horizon.
+
+The counter is queried from the database at the start of each cycle
+and incremented in memory as new entries are admitted within that
+cycle, so multi-cycle execution within the same day does not race
+against itself. The counter resets naturally at 00:00 UTC because the
+query keys on the entry's UTC date.
+
+**Reentries count against the cap.** A reentry on the same instrument
+(allowed for some horizons under a separate premium-rebound rule) is
+a new `paper_trades` document and consumes one slot toward the daily
+cap exactly like a first entry.
+
+When the cap blocks a candidate, the rejection is recorded as a
+`rejected_daily_cap` event in `events.jsonl`, with the instrument,
+horizon, bucket, current count, and cap value — making the constraint
+auditable end-to-end.
+
+### Going forward
+
+All entries from the cutover commit (2026-04-18) onward are subject
+to the daily cap. The cap value matches the backtest's per-day
+per-bucket selectivity exactly; the assert in the backtest module
+enforces that the two cannot drift apart again.
+
+This is the **mechanic alignment** counterpart to the universe
+alignment of session 48 — the paper trader and the backtest now share
+the same selection rule *and* the same capacity rule, while preserving
+the paper trader's higher-cadence execution.
+
+### Why the gap existed
+
+When the paper trader was promoted from monthly-only (v1, daily
+cadence) to multi-horizon (v2, 1-minute cadence) on 2026-04-13, the
+selectivity rule was ported from the backtest as "top-K per bucket"
+without an explicit per-day boundary. In the daily-cadence v1 setting,
+"per cycle" and "per day" coincide, so the issue did not surface. In
+the 1-minute v2 setting, they no longer do.
+
+The diagnostic work is in session 54. The decision to cap and the
+empirical justification for the specific cap value are recorded in
+the research repo's session logs (proprietary).
+
+### How to verify
+
+- Search `events.jsonl` for the new event type:
+
+```bash
+grep '"type":"rejected_daily_cap"' events.jsonl | head
+```
+
+- Each such event carries `horizon`, `t_bucket`, `cap`, and
+  `count_today` fields. After the cutover, no more than `cap` entries
+  with the same `(horizon, t_bucket, ts_utc[:10])` should appear in
+  `events.jsonl`.
+
+- The historical excess can be reproduced from the published log: for
+  every UTC day and every (horizon, t_bucket) combination prior to the
+  fix timestamp, count the `entry` events; days where any
+  (horizon, t_bucket) cell exceeds the cap are the affected days. The
+  sum of (count − cap) across all such cells is 95.

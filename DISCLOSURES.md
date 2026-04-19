@@ -500,3 +500,96 @@ reader's uncertainty: **the realized result cannot be worse than the
 pessimistic scenario, unless the actual market buy paid above the
 best ask at the time of the exit decision** — which is a liquidity
 event that would be observable separately.
+
+---
+
+## 2026-04-19 (session 55): Backtest L2 convention — pessimistic scenario
+
+### What is being disclosed
+
+The published canonical backtest numbers — the `+131.6% / +15.9% / +26.8%` per-year ROI baselines for daily / weekly / monthly in bear holdout — are computed under a specific L2 (bid-ask spread) convention. This disclosure documents (a) what that convention actually measures, (b) why it is **optimistic** for a taker-style execution, and (c) a parallel "pessimistic" scenario calibrated empirically.
+
+### The canonical convention, made explicit
+
+For every trade in the backtest, L2 is computed as:
+
+    L2_total = 2 × |price_trade − mark_price|
+
+Where `price_trade` is the actual historical execution price in `options_trades` and `mark_price` is Deribit's theoretical fair value at the time of that trade.
+
+This captures **the effective cost paid by the historical trader**. Most trades in an active option book execute *inside* the quoted bid-ask spread — price improvement, limit orders filled by makers, etc. The quantity `|price − mark|` is typically smaller than the half bid-ask spread. Doubling it gives a reasonable proxy of what that individual trader paid in total friction, averaged across direction.
+
+### Why this is optimistic for a "taker" strategy
+
+The Polya strategy, in live execution, can operate on a spectrum:
+
+- **Maker-like** — post limit orders at/near the mid, wait for counterparty to cross. Low L2 cost, uncertain fill rate. The canonical convention approximates this.
+- **Taker-like** — cross the spread on both legs: hit the bid on entry (sell short to the best-bid price), hit the ask on exit (buy back at the best-ask price). Maximum speed, full spread paid on both sides.
+
+The canonical backtest does **not** decide which mode. It inherits whatever the historical trades in `options_trades` looked like — mostly maker-like with some price improvement. This leaves the reader unaware that the same strategy run as a pure taker would face higher L2.
+
+### Empirical calibration of the taker scenario
+
+For each horizon we measured a multiplier α such that:
+
+    L2_pessimistic = α × L2_canonical
+
+α was calibrated from **the bid-ask full spread actually observed in the order book**, via two data sources:
+
+| Horizon | α (median) | n  | Source                              |
+|---------|-----------:|---:|-------------------------------------|
+| Monthly | **2.19**   | 411 | `options_snapshots` (book quotes)   |
+| Weekly  | **1.84**   | 157 | `options_snapshots` (book quotes)   |
+| Daily   | **1.66**   | 129 | Paper trading entries (book quotes at execution time) |
+
+**Daily source note:** the order-book snapshot cron runs once per day and typically misses daily-expiry contracts (which are created and expire between two snapshot runs). We used the paper trader's recorded `best_bid` and `best_ask` at entry time instead — 129 entries across the first 6 days of paper trading. This is a smaller sample than the monthly/weekly α values and is subject to selection (only contracts the paper trader entered, not the full universe).
+
+The α values are the **median ratio** of observed full bid-ask spread to the canonical `2 × |price − mark|` over all matched (instrument, date) pairs. We used median (robust to outliers) rather than mean — the distribution of α has a long right tail driven by thin-book instruments.
+
+### Quantitative impact on the canonical baselines
+
+Applied to each horizon's canonical backtest (holdout OOS bear, 2025-09-07 → 2026-03-28, 757 / 106 / 209 trades respectively):
+
+| Horizon | Canonical ROI/yr | Pessimistic ROI/yr | Δ (pp/yr) |
+|---------|-----------------:|-------------------:|----------:|
+| Daily   | **+131.6%**      | **+124.0%**        | **−7.6**  |
+| Weekly  | **+15.9%**       | **+13.8%**         | **−2.1**  |
+| Monthly | **+26.8%**       | **+25.5%**         | **−1.3**  |
+
+Daily is the horizon most sensitive to this correction because premiums are smaller — L2 is a larger fraction of gross P&L. Monthly and weekly have large gross premiums relative to the spread, so the correction is marginal.
+
+**Win rate, sample size, and AUM are unchanged** — only L2 is scaled. α does not affect which trades are winners or losers; it only scales the execution cost.
+
+### Why this is a disclosure, not a bug fix
+
+The canonical numbers are not wrong. They describe performance *if the strategy trades like the historical traders in the book did* — which is a defensible baseline (maker-like, with price improvement). The pessimistic scenario describes a different, equally defensible baseline (taker, maximum speed).
+
+Real execution falls between these two, closer to one end or the other depending on:
+
+- Contract liquidity (thinner book → closer to pessimistic)
+- Execution patience (willingness to wait for limit fills → closer to canonical)
+- Market regime (volatility spikes widen spreads, push toward pessimistic)
+
+### What changed in the repository
+
+- Canonical backtest scripts (`backtest_strategy_v2.py`, `backtest_weekly_v2.py`, `backtest_strategy_daily_v2.py`) now accept a `BACKTEST_L2_ALPHA` environment variable. Without the variable (default α=1.0), they reproduce the canonical numbers exactly. With `BACKTEST_L2_ALPHA=α`, L2 is scaled by α globally.
+- The canonical numbers published in `README.md` and prior reports remain unchanged. The pessimistic scenario is presented in parallel for context.
+- Weekly reports henceforth reference both (canonical as "headline", pessimistic as "lower bound").
+
+### Caveats of the calibration
+
+- **Small temporal window:** snapshot data is concentrated in 2026-02-28 → 2026-04-09 (the last ~40 days of the holdout). α values represent spread regime during that window and may not extrapolate to the earlier 160 days.
+- **Daily α is especially small-sample:** n=129 from 6 days of live paper trading. As the paper trader accumulates more entries, this number will be revised.
+- **α ignores variance:** the median α is a point estimate. The full distribution has a long right tail (p90 ≥ 6 for monthly), meaning individual contracts can face much higher spread than the median.
+- **Sharpe ratio not recomputed under α:** the current Sharpe in the canonical output is calculated on gross P&L (y-units), not on net BTC P&L. Recomputing Sharpe under the pessimistic scenario would require a refactor; it is a future refinement.
+- **α is not dynamic within the backtest window:** we apply a single horizon-level α to every trade, which is an aggregate approximation. Trade-level α (from paired buy/sell trades in narrow time windows around each backtest trade) would be more rigorous but costs implementation time without changing the order-of-magnitude result here.
+
+### Reproducibility
+
+The calibration scripts are in the main (private) repository:
+
+- `check_l2_asymmetric_coverage.py` — measures viability of reconstructing bid/ask from trade `direction` labels. Gate: ≥70% coverage of the operational universe. Result: **95.7%** passed.
+- `check_bid_ask_proxy_validation.py` — validates direction-based proxy against snapshots. Result: strong bid/ask correlation (0.999) but the proxy does not capture the intraday bid-ask spread separation; pivoted to direct snapshot measurement.
+- `check_l2_alpha_factor.py` — measures α per horizon from snapshot full spread vs `2 × |price − mark|` in the same (instrument, date) pairs.
+
+Anyone can reproduce the α values from `options_snapshots` and `options_trades` in the main-repo database dump.

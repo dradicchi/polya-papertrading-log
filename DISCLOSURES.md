@@ -391,3 +391,112 @@ grep '"type":"rejected_daily_cap"' events.jsonl | head
   fix timestamp, count the `entry` events; days where any
   (horizon, t_bucket) cell exceeds the cap are the affected days. The
   sum of (count − cap) across all such cells is 95.
+
+---
+
+## 2026-04-19 (session 55): Exit pricing convention — optimistic vs pessimistic scenarios
+
+### Affected window
+
+- **Start:** 2026-04-13 21:41 UTC (first entry of paper trading v2)
+- **End:** ongoing (this is a reporting change, not a fix to the paper
+  trader itself)
+- **Affected entries:** all 110 closed trades to date, and every future
+  closed trade. No entry or exit in `events.jsonl` is modified.
+
+### What this is (and what it is not)
+
+This is **not a correction of a bug** in the paper trader. The paper
+trader's exit logic is unchanged. This is a **transparency disclosure
+about the accounting convention** used when computing P&L for closed
+trades.
+
+### The convention, made explicit
+
+From day one, the paper trader has recorded the execution price of
+every exit as the Deribit `mark_price` at the time of the exit
+decision. Equivalently: every exit event has
+`exec_btc == mark_price` and `l2_btc == 0` on the close leg.
+
+This is a specific modeling choice with a specific implication:
+
+> "The P&L reported assumes we close each short position at the mid
+> / mark price, with zero execution cost on the close leg."
+
+In real execution, closing a short option position requires buying the
+contract back — typically by hitting the ask (market buy) or placing a
+limit order at the mid with uncertain fill rate. The `mark_price`
+convention is therefore an **optimistic** baseline: it prices the
+close at the theoretical fair value, not at the price a market buy
+would actually pay.
+
+This convention was implicit in the codebase. It had not been
+explicitly documented in the published performance numbers.
+
+### Quantification in the window to date
+
+For the 110 closed trades in the current window, the gap between the
+optimistic (mark) convention and a pessimistic (best ask) scenario is:
+
+- **Daily**: 92 trades, +29% adjustment to reported P&L
+- **Weekly**: 14 trades, +6% adjustment
+- **Monthly**: 4 trades, +4% adjustment (low-n, noisy)
+- **Combined**: 110 trades, **+28.9%** adjustment
+
+The adjustment applies only to exits where the strategy actively buys
+back the position (`alpha_exit` and `expiry_guard` exit reasons).
+Trades that expire OTM naturally require no buy-back and are not
+adjusted. In the current window, no position has reached natural OTM
+expiration yet, so the adjustment applies to 100% of closed trades.
+
+This is a 6-day window. The adjustment percentage may shift as the
+sample grows, especially once natural OTM expirations begin to appear
+in the monthly and weekly horizons (which would not contribute to the
+adjustment and would dilute the combined percentage).
+
+### What changed
+
+Starting with the weekly report for `2026-W16` and every report
+thereafter, a new section — **"Cenários de execução no fechamento"**
+— appears in the published report. It shows two numbers side by side
+for each horizon:
+
+- **PnL mark (optimistic)** — the existing convention, unchanged
+- **PnL ask (pessimistic)** — exits re-priced as if every buy-back
+  paid the full best ask, for trades that require a buy-back
+
+Real-world execution — limit orders at the mid with fallback to
+market buy, or patient splitting across the book — lands somewhere
+between these two. The purpose of reporting both is to make the range
+explicit, rather than implicitly baking the optimistic scenario into
+the headline number.
+
+### No retroactive modification
+
+Every previously published P&L number, Sharpe ratio, or ROI stands.
+They were all computed under the optimistic (mark) convention. They
+were not wrong in a bug sense — they were computed exactly as
+documented in the code. What was missing was the disclosure that the
+convention is optimistic.
+
+The underlying `events.jsonl` log is untouched. The fields needed to
+reconstruct any pricing scenario (`best_bid`, `best_ask`, `mark_price`
+at entry and exit) have always been recorded and are in the log
+verbatim. Any third party can apply their own execution assumption
+and reproduce either scenario end-to-end.
+
+### Why this matters for the track record
+
+The direction of distortion is consistent across all 110 trades: the
+optimistic convention overstates realized P&L by the amount of the
+close-side spread. A reader of the published report who did not know
+about the convention would reasonably interpret the headline P&L as
+"the result after execution costs" — which is true on the entry side
+(entries are recorded at `bid_price`, the short-side execution price)
+and optimistic on the exit side.
+
+The pessimistic scenario in the new section places a floor under the
+reader's uncertainty: **the realized result cannot be worse than the
+pessimistic scenario, unless the actual market buy paid above the
+best ask at the time of the exit decision** — which is a liquidity
+event that would be observable separately.

@@ -500,3 +500,66 @@ reader's uncertainty: **the realized result cannot be worse than the
 pessimistic scenario, unless the actual market buy paid above the
 best ask at the time of the exit decision** — which is a liquidity
 event that would be observable separately.
+
+---
+
+## 2026-04-19 (session 55 part 2): Sharpe daily methodology
+
+### What changed
+
+Prior weekly reports computed Sharpe daily with three conventions that
+differed from the standard quant literature baseline and from the
+internal research backtest:
+
+1. The daily P&L series included **only days with trades** (excluded
+   days with zero P&L from the sample).
+2. Variance used **sample formula** (divide by n−1) rather than
+   population formula (divide by n).
+3. Annualized with **sqrt(365)** (crypto calendar) rather than
+   **sqrt(252)** (trading days, equity convention).
+
+Starting with this report, Sharpe daily uses the standard convention
+for quant reporting and matches the internal backtest:
+
+1. Daily P&L series includes **every day in the measurement window**,
+   with zeros on days without trades.
+2. Variance uses **population formula** (divide by n).
+3. Annualization factor is **sqrt(252)**.
+
+### Why this matters
+
+The old convention inflated Sharpe daily by two compounding effects:
+ignoring zero days reduced the denominator (less variance), and
+sqrt(365) rather than sqrt(252) scaled the result up by ~17%. Both
+pushed the number upward relative to a fair comparison with the
+research backtest's own Sharpe numbers.
+
+### Quantification for 2026-W16
+
+With the methodology change applied to the same trade data:
+
+- **Combined Sharpe daily**: +5.69 → **+4.81** (−15.5%)
+- **Daily horizon**: +6.51 → **+5.52** (−15.2%)
+- **Weekly horizon**: previously "insufficient days" → **+9.25**
+- **Monthly horizon**: previously "insufficient days" → **−6.51**
+
+Weekly and monthly now produce a Sharpe figure because the zero-day
+inclusion means the 5-day minimum sample threshold is met (the
+window contains 7 full days). Monthly is negative because the four
+closed trades in the window are all losers, and the new methodology
+surfaces this honestly rather than reporting "insufficient".
+
+### Exit scenario expansion
+
+The same section that displays P&L under mark-exit and ask-exit
+(disclosed in the first part of this session) now also displays
+Sharpe daily under the two scenarios, side by side. The methodology
+described here applies identically to both — only the P&L series
+differs.
+
+### No retroactive modification
+
+All prior weekly reports stand with the numbers they showed. They
+were computed correctly under the convention in force at that time.
+The underlying trade data in `events.jsonl` is unchanged and can be
+used to reconstruct Sharpe under any chosen convention.

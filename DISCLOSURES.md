@@ -563,3 +563,117 @@ All prior weekly reports stand with the numbers they showed. They
 were computed correctly under the convention in force at that time.
 The underlying trade data in `events.jsonl` is unchanged and can be
 used to reconstruct Sharpe under any chosen convention.
+
+---
+
+## 2026-04-21 (session 59): PT/BT parity policy revision and operational override
+
+### What changed — in plain language
+
+Prior sessions (48 in particular) established a principle of
+strict parity between the backtest (BT) that produced our
+published track record and the paper trading engine (PT) running
+in real time. Every selection rule was shared through a single
+configuration; operational mechanics (cadence, reentry) were the
+only documented divergences.
+
+This session revised that principle. Going forward, the PT may
+deliberately diverge from the BT in operational parameters when:
+
+1. Direct evidence from the live PT run shows the canonical BT
+   parameter is dominated in the current regime.
+2. Cross-regime analysis (holdout bear + held-out bull) confirms
+   the dominance is not an artifact of a single sample.
+3. The divergence is applied via an explicit, named override —
+   not by editing the shared configuration — so the published
+   BT numbers, which investors can reproduce, are preserved.
+
+The BT numbers in our track record are the number investors
+should reproduce. The PT numbers in our public reports are the
+numbers that reflect what the live operation actually did. When
+those two diverge by design (as they do starting with this
+session), both remain faithful to their own convention.
+
+### First deliberate divergence — near-expiry entry/exit handling
+
+The BT applies a near-expiry cutoff (both as a gate that rejects
+new entries when the contract is close to expiration AND as a
+forced-exit trigger when an open contract is in-the-money near
+expiration). This cutoff exists to protect against paths where
+a contract that crosses the strike remains in-the-money through
+settlement.
+
+**Finding:** a cross-regime sweep conducted this session showed
+the canonical cutoff is dominated in the current market regime:
+
+- For two of the three horizons, the BT is mathematically
+  indifferent to the cutoff across the backtest range tested
+  (the cutoff never activates on the BT cadence of one
+  observation per day per contract).
+- On the third horizon, a looser cutoff dominates the canonical
+  value in the held-out bear sample on every individual axis
+  (daily Sharpe, annualized ROI, max drawdown, profit factor).
+- On the PT live cadence (continuous), the canonical cutoff
+  activates materially because the PT observes intra-day state
+  the BT does not. Across the 8 days of live run accumulated
+  before this session, the cutoff forced approximately 13%
+  of the exits to-date on terms that, under natural expiration,
+  would have produced better outcomes in the realized market
+  path.
+
+**Back-tested impact on the live sample (counterfactual, same
+trade data, re-evaluated under the looser cutoff):**
+
+- Combined P&L: +0.060 BTC → +0.187 BTC (~3.1×)
+- Combined daily Sharpe: +2.78 → +9.02
+- Combined Calmar: +32.8 → +152.8
+- Combined peak IM / AUM: unchanged
+
+**Caveat — regime.** A separate held-out bull sample (Q4-2024
+freeze) showed that on one of the three horizons, a *tighter*
+cutoff than the canonical value is dominant in strong-bull
+conditions. The current live run is in a bear/sideways regime
+and a strong-bull episode is not represented in the live PT
+sample. The override adopted here is correct for the current
+regime and may become sub-optimal if a sustained bull regime
+develops. A regime-detecting switch (automated reactivation of
+the BT-canonical cutoff under bull) is on the internal backlog.
+
+### Override applied
+
+A named override — scoped to the PT engine, not to the shared
+BT/PT configuration — replaces the near-expiry cutoff for all
+three horizons. The override is explicit in code, documented
+inline, and passed to the real-time scoring layer as an optional
+parameter that defaults to `None` (BT-canonical behavior).
+Numerical values of the override are part of the proprietary
+ruleset and are not disclosed here.
+
+### What remains shared between BT and PT
+
+All selection parameters previously established (moneyness
+range, maturity range, deviation threshold, top-K per time
+bucket per day, alpha-exit ratio, minimum bid filter) continue
+to be sourced from a single configuration object imported by
+both the BT and the PT. Universe classification continues to
+use `settlement_period` as established in session 48. The only
+operational parameter deliberately diverging, as of this
+session, is the near-expiry cutoff described above.
+
+### What the PT reports show starting this session
+
+- The existing "PT vs BT benchmark" table in the weekly report
+  is unchanged.
+- A new "Calmar / MDD comparison" table is added, showing BT
+  canonical Calmar, PT Calmar under both the optimistic (mark)
+  and pessimistic (ask) exit conventions from session 55, and
+  the delta PT-mark minus BT-canonical. Calmar is descriptive
+  (same status as the ROI deviation table since session 55) and
+  does not trigger an automatic alert.
+
+### No retroactive modification
+
+All prior weekly reports stand. The underlying trade data in
+`events.jsonl` is unchanged. Trades opened before the override
+was applied remain as they were executed; the override affects
+only decisions taken after its deployment.

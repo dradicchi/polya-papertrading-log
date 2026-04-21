@@ -677,3 +677,73 @@ All prior weekly reports stand. The underlying trade data in
 `events.jsonl` is unchanged. Trades opened before the override
 was applied remain as they were executed; the override affects
 only decisions taken after its deployment.
+
+---
+
+## 2026-04-21 (session 60): second deliberate divergence — daily entry time-to-expiry filter
+
+### Summary of what changed
+
+Following the principle established in session 59 — that PT may
+diverge from BT on operational parameters when cross-scenario
+evidence justifies — a second override has been added:
+
+- A daily-horizon cap on time-to-expiry at entry has been tightened
+  in the PT operational path, without changing the BT canonical
+  values.
+- The BT canonical parameters remain exactly as reported in
+  every prior weekly/monthly report.
+
+This is the second and only other operational parameter
+deliberately diverging.
+
+### Motivation — in plain language
+
+A post-mortem of the worst paper-trading losses since go-live
+identified a specific pattern: a disproportionate share of the
+deepest losses came from contracts entered in a narrow operational
+window — newly listed contracts very close to their initial
+moment of creation, when the order book is still forming and
+trading conditions are less favorable than at other times of day.
+
+The backtest does not sample that window (it uses a single
+trade per day from the middle of the trading window), so the
+pattern is invisible retrospectively. The PT, which evaluates
+every minute, picks up the cluster.
+
+### What remains shared between BT and PT
+
+- The canonical universe definition (contracts segregated by
+  settlement period).
+- The selection rules (threshold, top-K per bucket, alpha-exit,
+  moneyness bounds, and the general time-to-expiry window at
+  the BT-canonical width).
+- The margin/AUM convention, ROI formula, Sharpe/Sortino/Calmar
+  methodology, and disclosure framework.
+
+### Override applied
+
+- Scope: daily horizon only.
+- Monthly and weekly: canonical time-to-expiry filter preserved.
+  Paper-trading sample for those horizons is too small to draw
+  operational conclusions yet; they will be reassessed after
+  approximately 60 days of PT data.
+- Mechanism: the override tightens the upper bound of the entry
+  window while preserving the lower bound (expiry-guard already
+  at zero from session 59). Exact numerical value is preserved
+  as proprietary ruleset.
+
+### What the PT reports show
+
+All metrics and tables (Sharpe mark/ask, Sortino, Calmar, ROI vs
+BT pro-rata, execution scenarios) continue to be produced with
+the same methodology established in sessions 55 and 59. The
+only change is a gradual reduction in number of daily entries
+per day — consistent with rejecting the cluster identified.
+
+### No retroactive modification
+
+All prior weekly reports stand. The underlying trade data in
+`events.jsonl` is unchanged. Trades opened before this override
+was applied remain as they were executed; the override affects
+only decisions taken after its deployment.

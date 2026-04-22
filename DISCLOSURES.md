@@ -747,3 +747,114 @@ All prior weekly reports stand. The underlying trade data in
 `events.jsonl` is unchanged. Trades opened before this override
 was applied remain as they were executed; the override affects
 only decisions taken after its deployment.
+
+---
+
+## 2026-04-22 (session 61): third deliberate divergence — daily intra-cycle ranking
+
+### Background
+
+Session 61 analyzed which features of an elegible contract best
+predict realized PnL, both in the backtest universe and in the
+live paper-trading clean subset. Two approaches were applied
+(Spearman IC with bootstrap 95% CI N=500, and Mann-Whitney
+top-quartile vs baseline with Cliff's delta) across 12 candidate
+features, split by exit reason to separate real signal from
+mathematical tautology.
+
+The canonical intra-cycle ranking used by both the backtest and
+the paper trader is proprietary. It selects the top-K candidates
+per time bucket per cycle using one particular quality score
+derived from the TK model. This disclosure is about the change
+from that score to a different quality criterion, applied only
+to the daily horizon.
+
+### What the analysis found, in plain language
+
+Within the pool of contracts that already passed the entry filter
+(i.e. contracts the model has classified as overpriced relative
+to its fair-price estimate), the proprietary quality score used
+for ranking has **no statistically significant correlation with
+realized PnL**: Spearman ρ ≈ 0 across all exit-reason strata in
+both backtest and paper-trading samples. Confirms earlier findings
+(sessions 16-17, IC of the TK ranking is effectively zero within
+the already-filtered pool).
+
+A non-tautological alternative feature — moneyness (spot/strike)
+— has strong positive correlation with PnL across both samples
+and both regimes:
+
+- Backtest daily alpha-exit stratum (n=299): ρ = +0.75
+- Backtest daily expired-OTM stratum (n=458): ρ = +0.49
+- Paper-trading daily alpha-exit stratum (n=61): ρ = +0.57
+
+Direction and magnitude consistent across environments. Mechanism:
+in a short-call bear regime where 94% of entries expire out-of-
+the-money, PnL_net is roughly proportional to the gross premium
+captured. Near-ATM contracts have gross premium 2-3× higher than
+deep-OTM contracts at the same level of relative overpricing.
+
+### Counterfactual
+
+- Backtest daily, same canonical ruleset replacing ranking score
+  with moneyness-desc as the tiebreaker within each time bucket:
+  - Bear holdout: ROI/year improves, Sortino improves, Calmar
+    improves, Sharpe roughly unchanged. MDD absolute slightly
+    worse (near-ATM carries more gamma risk), but as a fraction
+    of the equity peak is unchanged.
+  - Q4-2024 bull freeze (out-of-sample): ROI/year, Sortino,
+    Calmar, and Sharpe all improve materially. Cross-regime
+    validated in the only bull OOS sample available.
+- Paper-trading historical counterfactual: of 88 cycles with a
+  committed entry, 64 (73%) would have selected at least one
+  different instrument under moneyness-desc ranking. Systematic
+  pattern: the proprietary score tends to pick deeper-OTM strikes
+  (where a small absolute discrepancy from fair price shows up as
+  a large percentage score but the gross premium is small);
+  moneyness-desc picks near-ATM strikes with much larger gross
+  premium. The daily horizon hits n_eligible > 3 within a single
+  cycle in 94% of cycles, so the ranking criterion changes the
+  operational selection in nearly every committed cycle.
+
+### Rationale for the override
+
+The proprietary score responds to the question *"which contract
+is most overpriced relative to fair value?"* — an excellent
+question for defining the *universe* of eligible short-call
+trades. The empirical finding of session 61 is that this same
+score is essentially uninformative for the *within-pool ranking*
+question *"which of these will realize the most PnL?"*. The
+moneyness criterion answers the latter directly in a bear-dominant
+regime. The universe filter (the 12% overpricing threshold)
+remains unchanged. The exit rule (alpha-exit at α=90%) remains
+unchanged. Only the tiebreaker among already-elegible candidates
+is revised.
+
+### Override applied
+
+- Scope: daily horizon only.
+- Monthly: trade-off — more absolute PnL but a lower Sharpe (−0.99
+  in bear); daily-like dominance does not hold. Not applied.
+- Weekly: dominated by the canonical ranking in the bear holdout
+  sample; dominates only in the Q4-2024 bull sample. Not applied
+  until a regime-detector can condition it.
+- Mechanism: the tiebreaker within each time bucket per cycle
+  is moneyness-desc instead of the canonical proprietary score.
+  All other filters (universe, capacity cap, reentry threshold,
+  expiry-guard override, time-to-expiry override, minimum bid)
+  remain as previously disclosed.
+
+### What the PT reports show
+
+All metrics and tables produced since session 61 reflect this
+override for the daily horizon. The override affects which
+contracts enter the book, not how any entered contract is
+priced, monitored, or closed. Reports from prior weekly cycles
+are unchanged.
+
+### No retroactive modification
+
+All prior weekly reports stand. The underlying trade data in
+`events.jsonl` is unchanged. Trades opened before this override
+was applied remain as they were executed; the override affects
+only decisions taken after its deployment.

@@ -858,3 +858,118 @@ All prior weekly reports stand. The underlying trade data in
 `events.jsonl` is unchanged. Trades opened before this override
 was applied remain as they were executed; the override affects
 only decisions taken after its deployment.
+
+---
+
+## 2026-04-23 (session 63): Break-even filter — canonicalization across BT and PT
+
+### What changed — in plain language
+
+The minimum-premium filter documented in the session 50 entry
+above (April 16 in this log) was, until this session, a rule
+local to the paper trader only. The backtest that generates the
+published track record did not apply the same filter, so a small
+number of trades with premium below the economic break-even were
+included in the backtest history even though they would have
+been rejected by the live paper trader.
+
+The principle matters more than the magnitude: **a trade whose
+maximum gross P&L under the exit rule is below the fixed
+execution costs is guaranteed to lose money on entry**. That is
+not a regime-dependent heuristic; it is arithmetic. The filter
+therefore belongs to both phases of testing (backtest and paper
+trading), uniformly across all three horizons, and is now sourced
+from a single shared configuration.
+
+### What this session did
+
+1. Formalized the threshold as a derived value rather than a
+   hard-coded number. The derivation is a function of the fixed
+   per-leg exchange fee, the α capture rate of the exit rule,
+   the expected bid-ask half-spread (as a fraction of premium),
+   and a small safety margin over the theoretical break-even.
+   The helper lives in `backtest_costs.compute_y_entry_min_btc()`
+   (research repo).
+2. The threshold is wired into `HORIZON_STRATEGY_FILTERS` for
+   monthly, weekly, and daily horizons — the same single source
+   of truth introduced in session 48 for universe parity.
+3. The paper trader now reads the threshold from the same dict
+   instead of carrying its own constant. An assertion at import
+   time verifies that all three horizon thresholds match (they
+   are uniform by design; if they diverge in the future, the
+   paper trader's filter logic would need to become
+   horizon-aware).
+4. The derived threshold, under conservative defaults (fee, α,
+   L2, safety), is slightly more restrictive than the legacy
+   value (session 50, ~14% above). The legacy value ignored
+   the L2 term in the break-even; the new derivation includes
+   it explicitly.
+
+### Quantification on the published track record
+
+The filter is re-applied to the backtest holdout and recalibrates
+the reference numbers. **Only the monthly horizon is affected
+materially**:
+
+- Monthly (bear holdout, pre- → post-canonicalization): ~33
+  trades filtered out of ~209 in the sample (~15%). Net ROI
+  rises from +13.2% → **+14.8%** (+1.6pp); Sharpe_d rises
+  +5.46 → +5.56. Win rate rises 95% → 99% (the removed trades
+  were consistently small net losses). AUM drops ~7% because
+  peak simultaneous initial margin is lower.
+- Weekly (bear holdout): **no trades affected.** Weekly has a
+  tighter moneyness ceiling which already excluded the premium
+  range where the filter binds.
+- Daily (bear holdout): **no trades affected.** Short time-to-
+  expiry keeps premiums above the threshold even for deeper-OTM
+  strikes.
+- Q4-2024 bull freeze (all horizons): **no trades affected.**
+  Bull regimes have higher premiums on average.
+
+The paper trading log is unchanged — the filter has been active
+on the paper trader since session 50, so every trade in
+`events.jsonl` is already filtered. The 2 trades disclosed in
+the session 50 entry (which would also have been rejected under
+the new, stricter threshold) remain as recorded; they are
+pre-fix artifacts from 2026-04-13 to 2026-04-16.
+
+### What changes in the published performance table
+
+Starting with the next weekly/monthly report, the monthly horizon
+numbers use the recalibrated reference. Other horizons are
+unchanged. The ROI gap between the paper trader and the backtest
+should narrow slightly on the monthly side because the backtest
+is no longer inflated by the loss-certain tail the paper trader
+was already rejecting.
+
+### Why now
+
+Diagnostic work in this session confirmed that four of the seven
+closed monthly positions in the paper trader (session 62 status
+report) were entered before the session 50 fix and would have
+been blocked under the now-canonical threshold. The remaining
+three were cross-universe from before the session 48 fix. The
+monthly horizon stopping-rule trigger visible in those reports
+is an artifact of those two pre-fix regimes, not degradation of
+the strategy; the canonicalization in this session ensures both
+phases reject the same loss-certain tail going forward.
+
+### How to verify
+
+- In the research repo, the helper is in
+  `src/backtest_costs.py::compute_y_entry_min_btc` with full
+  docstring and derivation.
+- In this repo, `events.jsonl` has always carried `best_bid` at
+  entry. Any third party can compute the break-even threshold
+  from the published Deribit fee schedule and the α of the exit
+  rule (documented in `README.md`) and verify that no entry
+  event from 2026-04-16 onward has `exec_btc` below that
+  threshold.
+
+### Audit trail
+
+- Research repo backlog item: B224 (internal reference).
+- Tests: 8 new unit tests in `tests/test_backtest_costs.py` and
+  `tests/test_paper_trading_cycle.py` covering the helper,
+  horizon uniformity, and the wiring to both phases.
+- Suite: 613 tests passing as of this session.

@@ -403,5 +403,14 @@
     "exec_btc": 0.0029,
     "im_btc": 0.137103,
     "exit_target_btc": 0.00029
+  },
+  {
+    "event_id": "bca9805f34f214e5",
+    "horizon": "daily",
+    "instrument": "BTC-28APR26-78500-C",
+    "ts_entry": "2026-04-26T13:24:07.171Z",
+    "exec_btc": 0.0065,
+    "im_btc": 0.142244,
+    "exit_target_btc": 0.00065
   }
 ]

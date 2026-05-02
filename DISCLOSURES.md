@@ -973,3 +973,32 @@ phases reject the same loss-certain tail going forward.
   `tests/test_paper_trading_cycle.py` covering the helper,
   horizon uniformity, and the wiring to both phases.
 - Suite: 613 tests passing as of this session.
+
+---
+
+## 2026-05-02 (session 73): First adverse tail event — post-mortem published
+
+A short directional move in BTC of approximately +3.6% over 52 hours
+produced five short CALL contracts settling in-the-money at the
+2026-05-02 08:00 UTC daily expiration. Aggregate net P&L impact:
+**−0.063 BTC** over a 17-hour observation window. Cumulative-since-
+go-live combined Sharpe: **+8.86 → +6.16**. No stopping rule was
+triggered; no methodology change is being made in response to this
+single event.
+
+The detailed post-mortem (cause, mechanism, what it confirms, what it
+does not change, honest forward recalibration of expectations, and
+forthcoming reporting improvements) is published as a standalone
+document at:
+
+**[`post-mortems/PM-001-2026-05-02.md`](post-mortems/PM-001-2026-05-02.md)**
+
+Future post-mortems for events meeting the inclusion criteria will
+accumulate in the same `post-mortems/` folder. Each post-mortem will
+also receive a short reference entry in this `DISCLOSURES.md` file
+for cross-indexing.
+
+The principle: **transparency over silent revision** — adverse events
+in vol-selling are structurally expected (Bondarenko 2014; Bakshi &
+Kapadia 2003) and are documented in real time, with honest
+interpretation, without retroactive modification of prior reports.

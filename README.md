@@ -6,6 +6,21 @@ This repository is the **source of truth** for the paper trading phase of Polya 
 
 ---
 
+## Current results
+
+**Through 2026-05-04** (23 days since go-live):
+
+- Annualized ROI: **+31.7%**
+- Sharpe ratio: **4.49**
+- Max drawdown: **−0.105 BTC** (−0.9% of AUM)
+- Trades closed: **248**
+
+Latest weekly report: [reports/weekly/W01.md](reports/weekly/W01.md)
+
+Numbers refresh per closed cycle. Live event stream in [`events.jsonl`](events.jsonl).
+
+---
+
 ## TL;DR for auditors
 
 1. Every event in `events.jsonl` is appended when it happens. Lines are never rewritten.
@@ -58,7 +73,7 @@ polya-papertrading-log/
 ├── SCHEMA.md                        (full definition of event fields)
 ├── VERIFY.md                        (step-by-step audit instructions)
 ├── LICENSE                          (CC-BY-4.0 for data)
-├── events.jsonl                     (FONTE DE VERDADE — append-only event stream)
+├── events.jsonl                     (SOURCE OF TRUTH — append-only event stream)
 ├── events.jsonl.ots                 (OpenTimestamps proofs, refreshed weekly)
 ├── positions/
 │   └── open.json                    (live snapshot of currently open positions)
@@ -111,10 +126,11 @@ the canonical universe. See `DISCLOSURES.md` for the full audit trail.
 
 ---
 
-## Contact
+## About Polya Technologies
 
-Daniel Radicchi — `github.com/dradicchi`
+Polya Technologies is an AI-native quantitative systems firm building proprietary trading systems on Bitcoin derivatives. This repository is the public audit trail of our paper trading phase — methodology proof before live capital deployment.
 
-For audit inquiries: open an issue on this repository.
-
-For business inquiries: dradicchi at gmail.com
+- Founder: Daniel Radicchi ([linkedin.com/in/daniel-radicchi](https://linkedin.com/in/daniel-radicchi))
+- Stage: late pre-seed
+- Contact: dradicchi at gmail.com
+- Audit inquiries: open an issue on this repository

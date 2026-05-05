@@ -15,7 +15,7 @@ This repository is the **source of truth** for the paper trading phase of Polya 
 - Max drawdown: **−0.105 BTC** (−0.9% of AUM)
 - Trades closed: **248**
 
-Latest weekly report: [reports/weekly/W01.md](reports/weekly/W01.md)
+Latest weekly report: [reports/weekly/W03.md](reports/weekly/W03.md)
 
 Numbers refresh per closed cycle. Live event stream in [`events.jsonl`](events.jsonl).
 

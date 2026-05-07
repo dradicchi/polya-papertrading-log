@@ -1002,3 +1002,87 @@ The principle: **transparency over silent revision** — adverse events
 in vol-selling are structurally expected (Bondarenko 2014; Bakshi &
 Kapadia 2003) and are documented in real time, with honest
 interpretation, without retroactive modification of prior reports.
+
+---
+
+## 2026-05-07 (session 75): PM-001 root-cause resolution — early-close refinement reverted
+
+The PM-001 post-mortem published 2026-05-02 documented a single −0.063 BTC
+batch and stated no methodology change would be made in response. Between
+2026-05-04 and 2026-05-06 the adverse pattern continued; cumulative cluster
+impact reached **−0.272 BTC** over five consecutive trading days, with
+daily-horizon MDD/peak-equity touching −101%.
+
+The original "no methodology change" decision was revised after the cluster
+materialized and counterfactual analysis was completed. The post-mortem at
+[`post-mortems/PM-001-2026-05-02.md`](post-mortems/PM-001-2026-05-02.md)
+has been **updated with a new resolution section** documenting the analysis
+and the decision.
+
+### Methodology change applied
+
+The exit/early-close convention used by the paper-trading runner was
+realigned with the canonical rule on 2026-05-07. An operational refinement
+introduced 2026-04-21 (session 59) — which disabled an early-close rule
+in all three horizons — was reverted in all three horizons. The paper
+trading now uses the same early-close rule that is in effect in the
+backtest as the canonical reference, and that was in effect prior to the
+2026-04-21 refinement.
+
+### Why
+
+A defensible counterfactual analysis (replay of the 28/29 affected trades
+since 2026-04-22 using independent Deribit trade-tape data three days
+before each contract's scheduled expiration) showed that the canonical
+rule would have preserved approximately +0.323 BTC over the 16-day window
+relative to actual realized P&L. The recovery distribution was concentrated
+in transforming large losses into small losses (74% of recovery), not in
+eliminating losses (only 7 trades flipped sign, while 20 large losses
+became small losses).
+
+The structural cause: the early-close-disabled refinement displayed an
+asymmetric profile during this window — small gain in stable regimes,
+large loss in mini-rally regimes (gain/loss ratio approximately 7.5×
+unfavorable). This is consistent with structural literature on volatility
+selling (Bondarenko 2014; Brown 2012, "Red-Blooded Risk"): operational
+discipline rules act as synthetic tail-cuts, sacrificing part of the
+gamma-decay capture in exchange for variance reduction in the left tail.
+Removing them is operationally equivalent to "selling more tail" on a
+strategy that already has natural short-tail exposure.
+
+### What is not changing
+
+- **Historical reports W01–W03 are not retroactively modified.** They
+  reflect what was in fact executed under the prior configuration.
+- **Backtest canonical numbers are unaffected.** The backtest already
+  used the canonical rule; the refinement was a paper-trading-specific
+  override, not a backtest change.
+- **Other operational refinements remain in place** (entry time-to-expiry
+  filter, intra-cycle ranking) and are evaluated on their own merits at
+  their own pre-scheduled checkpoints.
+- **A separately considered filter mitigation** (entry-blocking based on
+  implied-volatility regime and moneyness buffer) was **not promoted**.
+  The counterfactual analysis showed it would be redundant with the
+  early-close revert and would reduce returns in normal regimes.
+
+### Lesson logged
+
+Any operational refinement layered on top of an asymmetric short-vol
+strategy must be audited not only by mean Sharpe / mean ROI but by the
+**full return distribution** across regimes — left-tail conditional
+metrics, peak-equity-based drawdown, and the asymmetric gain/loss ratio.
+A refinement that improves stable-regime returns by a small amount is
+not acceptable if its rare-regime contribution is large in the opposite
+direction, even if the rare regime has lower observed frequency in the
+sample at hand.
+
+### How to verify
+
+The change is reflected in the next paper-trading entries (no new entries
+will be made under the prior refinement). Forthcoming weekly and monthly
+reports will reflect the revised exit convention in their methodology
+section.
+
+The principle remains: **transparency over silent revision** — refinements
+are reversible when evidence accumulates against them, and the reversal
+is documented at the time of decision, not retroactively.

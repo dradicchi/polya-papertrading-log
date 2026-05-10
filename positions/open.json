@@ -556,5 +556,221 @@
     "exec_btc": 0.0007,
     "im_btc": 0.103128,
     "exit_target_btc": 7.000000000000001e-05
+  },
+  {
+    "event_id": "a444249f95130201",
+    "horizon": "daily",
+    "instrument": "BTC-12MAY26-85000-C",
+    "ts_entry": "2026-05-09T07:47:06.450Z",
+    "exec_btc": 0.0004,
+    "im_btc": 0.1,
+    "exit_target_btc": 4e-05
+  },
+  {
+    "event_id": "6b3ffab1686fa9d5",
+    "horizon": "daily",
+    "instrument": "BTC-12MAY26-84000-C",
+    "ts_entry": "2026-05-09T07:47:06.459Z",
+    "exec_btc": 0.0007,
+    "im_btc": 0.102323,
+    "exit_target_btc": 7.000000000000001e-05
+  },
+  {
+    "event_id": "22753e53e86fec58",
+    "horizon": "daily",
+    "instrument": "BTC-12MAY26-84000-C",
+    "ts_entry": "2026-05-09T07:47:06.494Z",
+    "exec_btc": 0.0007,
+    "im_btc": 0.102323,
+    "exit_target_btc": 7.000000000000001e-05
+  },
+  {
+    "event_id": "e3f5838c86ee1e10",
+    "horizon": "daily",
+    "instrument": "BTC-12MAY26-85000-C",
+    "ts_entry": "2026-05-09T07:47:06.502Z",
+    "exec_btc": 0.0004,
+    "im_btc": 0.1,
+    "exit_target_btc": 4e-05
+  },
+  {
+    "event_id": "8771a7b90d4a3466",
+    "horizon": "daily",
+    "instrument": "BTC-12MAY26-84000-C",
+    "ts_entry": "2026-05-09T07:47:06.539Z",
+    "exec_btc": 0.0007,
+    "im_btc": 0.102323,
+    "exit_target_btc": 7.000000000000001e-05
+  },
+  {
+    "event_id": "188948e58509c327",
+    "horizon": "daily",
+    "instrument": "BTC-12MAY26-85000-C",
+    "ts_entry": "2026-05-09T07:47:06.543Z",
+    "exec_btc": 0.0004,
+    "im_btc": 0.1,
+    "exit_target_btc": 4e-05
+  },
+  {
+    "event_id": "68cbe6fbc91d4004",
+    "horizon": "daily",
+    "instrument": "BTC-13MAY26-85000-C",
+    "ts_entry": "2026-05-09T08:04:06.009Z",
+    "exec_btc": 0.0006,
+    "im_btc": 0.1,
+    "exit_target_btc": 5.9999999999999995e-05
+  },
+  {
+    "event_id": "e093ecf6876175ac",
+    "horizon": "daily",
+    "instrument": "BTC-13MAY26-81500-C",
+    "ts_entry": "2026-05-09T20:00:05.623Z",
+    "exec_btc": 0.0085,
+    "im_btc": 0.143004,
+    "exit_target_btc": 0.0008500000000000001
+  },
+  {
+    "event_id": "5213d800a58fc098",
+    "horizon": "daily",
+    "instrument": "BTC-13MAY26-81500-C",
+    "ts_entry": "2026-05-09T20:00:05.654Z",
+    "exec_btc": 0.0085,
+    "im_btc": 0.143004,
+    "exit_target_btc": 0.0008500000000000001
+  },
+  {
+    "event_id": "4db80eb0ddcb6f47",
+    "horizon": "daily",
+    "instrument": "BTC-13MAY26-84000-C",
+    "ts_entry": "2026-05-10T00:00:07.608Z",
+    "exec_btc": 0.0012,
+    "im_btc": 0.108632,
+    "exit_target_btc": 0.00011999999999999999
+  },
+  {
+    "event_id": "264775f418536b79",
+    "horizon": "daily",
+    "instrument": "BTC-13MAY26-83500-C",
+    "ts_entry": "2026-05-10T00:00:07.626Z",
+    "exec_btc": 0.0018,
+    "im_btc": 0.114831,
+    "exit_target_btc": 0.00018
+  },
+  {
+    "event_id": "e34e4f7db6016cc8",
+    "horizon": "daily",
+    "instrument": "BTC-13MAY26-82000-C",
+    "ts_entry": "2026-05-10T00:00:07.659Z",
+    "exec_btc": 0.005,
+    "im_btc": 0.133427,
+    "exit_target_btc": 0.0005
+  },
+  {
+    "event_id": "c3f2edeaa37baeb9",
+    "horizon": "daily",
+    "instrument": "BTC-13MAY26-82500-C",
+    "ts_entry": "2026-05-10T00:00:07.665Z",
+    "exec_btc": 0.0036,
+    "im_btc": 0.127228,
+    "exit_target_btc": 0.00036
+  },
+  {
+    "event_id": "d8cbaeea1f4ab2c6",
+    "horizon": "daily",
+    "instrument": "BTC-13MAY26-82000-C",
+    "ts_entry": "2026-05-10T00:00:07.693Z",
+    "exec_btc": 0.005,
+    "im_btc": 0.133427,
+    "exit_target_btc": 0.0005
+  },
+  {
+    "event_id": "d829ae361378b1dc",
+    "horizon": "daily",
+    "instrument": "BTC-13MAY26-82500-C",
+    "ts_entry": "2026-05-10T00:00:07.698Z",
+    "exec_btc": 0.0036,
+    "im_btc": 0.127228,
+    "exit_target_btc": 0.00036
+  },
+  {
+    "event_id": "7d824d2f4a9e8bd0",
+    "horizon": "daily",
+    "instrument": "BTC-13MAY26-83000-C",
+    "ts_entry": "2026-05-10T00:17:06.016Z",
+    "exec_btc": 0.0026,
+    "im_btc": 0.121562,
+    "exit_target_btc": 0.00026
+  },
+  {
+    "event_id": "bafc5fba1fd07ccd",
+    "horizon": "daily",
+    "instrument": "BTC-13MAY26-83000-C",
+    "ts_entry": "2026-05-10T00:17:06.052Z",
+    "exec_btc": 0.0026,
+    "im_btc": 0.121562,
+    "exit_target_btc": 0.00026
+  },
+  {
+    "event_id": "3e9b2cb37767b687",
+    "horizon": "daily",
+    "instrument": "BTC-13MAY26-85000-C",
+    "ts_entry": "2026-05-10T08:00:06.303Z",
+    "exec_btc": 0.0005,
+    "im_btc": 0.1,
+    "exit_target_btc": 5e-05
+  },
+  {
+    "event_id": "6c544137d8ebe727",
+    "horizon": "daily",
+    "instrument": "BTC-13MAY26-85000-C",
+    "ts_entry": "2026-05-10T08:00:06.343Z",
+    "exec_btc": 0.0005,
+    "im_btc": 0.1,
+    "exit_target_btc": 5e-05
+  },
+  {
+    "event_id": "b6e7e48cd432f1ae",
+    "horizon": "daily",
+    "instrument": "BTC-14MAY26-85000-C",
+    "ts_entry": "2026-05-10T08:06:05.398Z",
+    "exec_btc": 0.0007,
+    "im_btc": 0.1,
+    "exit_target_btc": 7.000000000000001e-05
+  },
+  {
+    "event_id": "1e33ac49c86f524c",
+    "horizon": "daily",
+    "instrument": "BTC-13MAY26-84000-C",
+    "ts_entry": "2026-05-10T08:09:05.654Z",
+    "exec_btc": 0.0011,
+    "im_btc": 0.109557,
+    "exit_target_btc": 0.00011000000000000002
+  },
+  {
+    "event_id": "4c42eed9953a31f1",
+    "horizon": "daily",
+    "instrument": "BTC-13MAY26-84000-C",
+    "ts_entry": "2026-05-10T08:09:05.692Z",
+    "exec_btc": 0.0011,
+    "im_btc": 0.109557,
+    "exit_target_btc": 0.00011000000000000002
+  },
+  {
+    "event_id": "6d44c0079a1eec44",
+    "horizon": "daily",
+    "instrument": "BTC-13MAY26-83500-C",
+    "ts_entry": "2026-05-10T12:41:06.384Z",
+    "exec_btc": 0.0018,
+    "im_btc": 0.117978,
+    "exit_target_btc": 0.00018
+  },
+  {
+    "event_id": "c2011034d383356d",
+    "horizon": "daily",
+    "instrument": "BTC-13MAY26-83500-C",
+    "ts_entry": "2026-05-10T12:41:06.418Z",
+    "exec_btc": 0.0018,
+    "im_btc": 0.117978,
+    "exit_target_btc": 0.00018
   }
 ]

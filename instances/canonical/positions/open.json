@@ -9,15 +9,6 @@
     "exit_target_btc": 4e-05
   },
   {
-    "event_id": "f87dc68a7d177db1",
-    "horizon": "daily",
-    "instrument": "BTC-14MAY26-83500-C",
-    "ts_entry": "2026-05-12T01:17:06.808Z",
-    "exec_btc": 0.0025,
-    "im_btc": 0.123042,
-    "exit_target_btc": 0.00025
-  },
-  {
     "event_id": "8cb82cc5eb3f30d6",
     "horizon": "daily",
     "instrument": "BTC-16MAY26-87000-C",

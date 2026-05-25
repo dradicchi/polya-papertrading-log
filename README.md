@@ -1,50 +1,70 @@
 # Polya Paper Trading Log
 
-Public, tamper-evident track record of a systematic short-volatility strategy on BTC inverse options (Deribit).
+Public, cryptographically verifiable paper-trading record of a systematic short-volatility strategy on Bitcoin inverse options (Deribit). Every trade, every decision, every model output is appended to this repository as it happens — no retroactive edits, no marketing reconstructions, no selective disclosure.
 
-This repository is the **source of truth** for the paper trading phase of Polya Technologies. It contains every simulated entry, exit, and resulting P&L, recorded in real time from public market data. The model behind the trades is proprietary and is **not** disclosed here — the purpose of this log is to let third parties (investors, auditors) independently verify the realized performance of the strategy without depending on Polya's own reports.
-
----
-
-## Current results
-
-**Through 2026-05-04** (23 days since go-live):
-
-- Annualized ROI: **+31.7%**
-- Sharpe ratio: **4.49**
-- Max drawdown: **−0.105 BTC** (−0.9% of AUM)
-- Trades closed: **248**
-
-Latest weekly report: [reports/weekly/W03.md](reports/weekly/W03.md)
-
-Numbers refresh per closed cycle. Live event stream in [`events.jsonl`](events.jsonl).
+[Polya Technologies](https://polyatechnologies.com) · [Founder](https://linkedin.com/in/daniel-radicchi) · [Contact](mailto:contact@polyatechnologies.com)
 
 ---
 
-## TL;DR for auditors
+## What this is
 
-1. Every event in `events.jsonl` is appended when it happens. Lines are never rewritten.
-2. Every commit in this repo is cryptographically signed with an Ed25519 SSH key published on the author's GitHub profile. GitHub displays a **Verified** badge on each valid commit.
-3. The repository history is append-only. Force-push is disallowed by policy. Any modification to past commits would break the signature chain and be visible in any clone made before the tampering.
-4. Weekly snapshots are anchored to the Bitcoin blockchain via [OpenTimestamps](https://opentimestamps.org/), giving each anchored point an unforgeable timestamp independent of GitHub and the author.
-5. All event prices can be cross-checked against the Deribit public order book API at the timestamp declared in each event. No insider data, no aggregates, no model output — only externally observable market state.
-6. To independently verify the full PnL from the raw event stream, see [`VERIFY.md`](./VERIFY.md).
+This repository is the operational log of Polya's paper-trading phase. It is **not** a backtest, **not** a marketing site, and **not** a curated highlight reel. It is the actual record of trades placed (in paper-trade mode) against live Deribit order books, recorded as the trades happen.
+
+The purpose is to make Polya's track record **independently verifiable** before live capital is deployed, and to make any future track record **resistant to retroactive editing**.
+
+## Why this exists
+
+In quantitative finance, track records are typically disclosed in aggregated form (monthly NAV, annual returns) by the fund itself, with no underlying trade-level data and no third-party verification that the disclosed numbers correspond to actual executions. The investor relies on the fund's word, the fund's auditor's word, and SEC registration where applicable.
+
+Polya Technologies is an **AI-assisted proprietary trading firm** — no external limited partners, no asset management business — so we have no regulatory obligation to disclose anything. We chose to publish the full trade-level record anyway, with cryptographic guarantees of sequence, time, and author integrity, because:
+
+1. We are deploying capital from equity investors who deserve to verify the operation, not just trust the founder's representation
+2. A track record that cannot be retroactively edited is a stronger guarantee than any conventional audit
+3. The cost of operating in this open mode is low; the credibility premium is high
+
+---
+
+## Current state
+
+**42 days since go-live** · Apr 13 → May 24, 2026 · Capital pot: 20 BTC
+
+### Architecture: four instances running in parallel
+
+Since May 9, 2026, the paper-trading system runs four parallel parameter configurations to isolate the operational effect of strategy parameters and preserve experimental optionality without losing the historical baseline:
+
+| Instance | Status | Configuration |
+|---|---|---|
+| `legacy_v2.1` | Frozen on May 9 | Original PT v2 configuration; preserved for historical reference (includes the PM-001 event window) |
+| `canonical` | Active since May 9 | Reference instance, no experimental overrides — the raw model |
+| `full_overrides` | Active since May 9 | Experimental configuration A (under live evaluation) |
+| `partial_overrides` | Active since May 9 | Experimental configuration B (under live evaluation) |
+
+### Performance snapshot — canonical instance, daily model
+
+Across 16 days, 92 closed trades:
+
+- Annualized ROI on AUM: **+111.7%**
+- Daily Sharpe ratio: **+9.99**
+- Win rate: **90%**
+- Max drawdown: **−0.3%** of AUM
+
+The full cross-instance, cross-horizon metrics are published in [`reports/`](reports/) and refresh per closed cycle. Live event stream in [`events.jsonl`](events.jsonl). The canonical pricing-and-execution stack runs without experimental overrides; the two override instances are under live evaluation.
 
 ---
 
 ## What this log records
 
-Three simultaneous models operating on Deribit BTC inverse options, CALL-only, 1 contract per signal:
+Three concurrent models operate on Deribit BTC inverse options (settled in BTC), short side, one contract per signal:
 
 | Horizon | Instruments | Hold duration |
 |---|---|---|
 | **Monthly** | `BTC-DDMMMYY-SSSSS-C` with t ≤ 60 days | ~22 days |
-| **Weekly** | Same family, t ∈ [1, 21] days | ~10 days |
-| **Daily** | Same family, t ∈ [0.5, 4] days | ~1–3 days |
+| **Weekly** | Same family, t ∈ [1, 21] days | ~7 days |
+| **Daily** | Same family, t ∈ [0.5, 4] days | ~1.5 days |
 
-The three models operate over a single shared capital pot of **9.6 BTC** (the "Floor" level from the strategy's capacity analysis, including a conservative MtM buffer). All positions are short — the strategy collects option premium when the model identifies instruments that are structurally overpriced relative to a theoretical fair value.
+The strategies systematically capture the volatility risk premium by selling option premium when the pricing model identifies the market price as overstated relative to fair value, with early exit when the market converges to the model.
 
-**What you will NOT find here:** the model that decides which contracts to enter. No signal values, no fair prices, no regression coefficients, no predictor data. The audit scope is: *"given that a trade was opened, is the recorded execution consistent with the public book at that timestamp, and is the final P&L correctly computed?"*. That question is answerable from the data in this repo plus public Deribit market data.
+The pricing model, ranking heuristics, parameter values, and execution layer remain proprietary. **This repository does not disclose them.** It discloses what is necessary to verify that the trades happened, that the prices and volumes correspond to public Deribit data, and that the P&L computation is honest.
 
 ---
 
@@ -54,14 +74,58 @@ The complete operational ruleset (entry criteria, exit logic, position sizing, s
 
 What can be stated publicly:
 
-- **Positions are short CALL only** (the strategy collects option premium). This is directly observable from the events.
-- **Sizing is 1 contract per signal**, invariant across all three horizons. This is directly observable from the events.
-- **Capital pot is 20 BTC** (resized from 9.6 BTC on 2026-04-15 — see `DISCLOSURES.md`). Entries are rejected when the pot is fully committed (logged as `rejected_no_capital` events).
+- **Positions are short CALL only** (the strategy collects option premium). Directly observable from the events.
+- **Sizing is 1 contract per signal**, invariant across all three horizons. Directly observable.
+- **Capital pot is 20 BTC** (resized from 9.6 BTC on 2026-04-15 — see [`DISCLOSURES.md`](DISCLOSURES.md)). Entries are rejected when the pot is fully committed (logged as `rejected_no_capital`).
 - **Exit rules are deterministic and rule-based** — no discretionary exits. The specific exit logic is proprietary, but the realized execution (entry price, exit price, exit reason, P&L) is fully logged and verifiable.
 - **Stopping rules exist** and are monitored automatically. If triggered, a `pause` event is logged publicly with the affected horizon.
-- **Rules are frozen for the duration of the test** (minimum 90 days). Any mid-period rule change would invalidate the out-of-sample claim and would be disclosed as a `correction` event in the log.
+- **Rules are frozen for the duration of the test** (minimum 90 days). Any mid-period rule change would invalidate the out-of-sample claim and is disclosed as a `correction` event in the log.
 
-The audit question is not "are the rules good?" — it is "given the rules (whatever they are), does the recorded track record accurately reflect what the strategy produced in forward, out-of-sample conditions?". That question is fully answerable from this repository.
+The audit question is not "are the rules good?" — it is **"given the rules (whatever they are), does the recorded track record accurately reflect what the strategy produced in forward, out-of-sample conditions?"**. That question is fully answerable from this repository.
+
+---
+
+## Verification — how to audit this repository
+
+Six layers of cryptographic and methodological protection. The detailed step-by-step guide is in [`VERIFY.md`](VERIFY.md); the summary below describes what each layer proves.
+
+### Trust layers
+
+| Layer | What it proves | Strength |
+|---|---|---|
+| SSH-signed commits (Ed25519) | Events were authored by the holder of the signing key | Strong (cryptographic) |
+| GitHub Verified badge | GitHub independently confirms each signature | Strong (independent verifier) |
+| Append-only `events.jsonl` + git diff | No past events were edited | Strong (Merkle chain) |
+| OpenTimestamps anchor | Events existed at or before the anchored Bitcoin block | Very strong (Bitcoin blockchain) |
+| P&L recomputation (`verify.py`) | Declared performance matches raw event data | Deterministic (mathematical) |
+| External price cross-check | Declared market state actually occurred on Deribit | Strongest (independent data source) |
+
+No single layer is sufficient on its own. Together, they form a defense-in-depth that would require compromise of multiple independent systems (GitHub, Bitcoin blockchain, Deribit, any auditor's own clone) to defeat.
+
+### Signing key
+
+- **Ed25519 SSH key** with fingerprint `SHA256:Xp/CnXQhSmdpBRLWhoOXENkBc3FRkMIJeOBFh+XJKUM`
+- Published on the author's GitHub profile as both Authentication Key and Signing Key
+- Fetch with `curl -s https://github.com/dradicchi.keys`
+- Git native SSH signing format (since Git 2.34); run `git log --show-signature` to verify
+
+### What this audit proves — and does not prove
+
+This audit proves:
+
+- **Sequence integrity** (append-only): no event was inserted retroactively
+- **Time integrity** (OpenTimestamps): events were recorded no later than the next weekly Bitcoin-anchored timestamp
+- **Author integrity** (Ed25519): commits were made by the declared author
+- **Computational integrity** (verify.py): declared P&L matches the raw event data deterministically
+- **Market integrity** (Deribit cross-reference): declared prices and volumes correspond to public market data at the declared timestamps
+
+This audit does **not** prove:
+
+- The **trading model itself** is correct or profitable in expectation. Fair-value pricing, ranking, and execution heuristics remain proprietary and unverifiable from this repository.
+- That **paper-traded execution will translate to live execution** at the same prices. Live deployment introduces additional frictions — order rejection, ask-side fills, queue priority — that paper trading does not model.
+- This is **not an audit by a registered third-party auditor** under any regulatory regime. It is independent verification by anyone with access to a Git client and a few standard tools.
+
+These limits are intentional: the repository discloses what an investor can verify independently, and clearly distinguishes **verification of operation** from **validation of strategy**.
 
 ---
 
@@ -69,68 +133,75 @@ The audit question is not "are the rules good?" — it is "given the rules (what
 
 ```
 polya-papertrading-log/
-├── README.md                        (this file)
-├── SCHEMA.md                        (full definition of event fields)
-├── VERIFY.md                        (step-by-step audit instructions)
-├── LICENSE                          (CC-BY-4.0 for data)
-├── events.jsonl                     (SOURCE OF TRUTH — append-only event stream)
-├── events.jsonl.ots                 (OpenTimestamps proofs, refreshed weekly)
+├── README.md                  ← you are here
+├── SCHEMA.md                  ← full definition of event fields
+├── VERIFY.md                  ← step-by-step audit instructions
+├── DISCLOSURES.md             ← methodological gaps, retroactive notes
+├── LICENSE                    ← CC-BY-4.0 (data only; model is proprietary)
+├── events.jsonl               ← SOURCE OF TRUTH — append-only event stream
+├── events.jsonl.ots           ← OpenTimestamps proof (Bitcoin-anchored, weekly)
+├── verify.py                  ← deterministic P&L re-computation script
+├── instances/                 ← per-instance event streams (multi-instance architecture)
 ├── positions/
-│   └── open.json                    (live snapshot of currently open positions)
-├── sessions/
-│   └── YYYY-MM-DD.md                (human-readable daily summary)
-└── reports/
-    └── YYYY-WW.md                   (weekly performance report)
+│   └── open.json              ← live snapshot of currently open positions
+├── sessions/                  ← human-readable daily summaries
+├── reports/
+│   ├── weekly/                ← weekly performance reports (W01, W02, ...)
+│   └── monthly/               ← monthly performance reports (M01, ...)
+├── post-mortems/              ← operational incident records (PM-001, ...)
+└── api_archive/               ← raw market data archive (auditor reference)
 ```
 
-- `events.jsonl` is the canonical machine-readable source of truth. Every other file in the repo is a view of it. If any file disagrees with `events.jsonl`, `events.jsonl` is correct and the other file has a bug.
-- `positions/open.json` is **rewritten** with each event (it is a projection, not history). Its content should always be reproducible from replaying `events.jsonl`.
-- `sessions/` and `reports/` are generated artifacts that summarize what happened. They are not authoritative — they are convenience renderings.
+- `events.jsonl` is the canonical machine-readable source of truth. Every other file in the repository is a view of it. If any file disagrees with `events.jsonl`, `events.jsonl` is correct.
+- `positions/open.json` is **rewritten** with each event (it is a projection, not history). Its content is reproducible from replaying `events.jsonl`.
+- `sessions/` and `reports/` are generated artifacts — convenience renderings, not authoritative.
+- `instances/` segregates the four parallel parameter configurations introduced on May 9, 2026.
 
 ---
 
-## Signing and verification
+## Operational transparency
 
-- **Signing key:** Ed25519 SSH key with fingerprint `SHA256:Xp/CnXQhSmdpBRLWhoOXENkBc3FRkMIJeOBFh+XJKUM`
-- **Publisher:** `github.com/dradicchi` — the key is published on the GitHub profile both as Authentication Key and Signing Key. Anyone can fetch the public key via `https://github.com/dradicchi.keys` and verify it matches.
-- **Signing format:** Git SSH signing (native support since Git 2.34). Run `git log --show-signature` to see `Good "git" signature for ...` for every commit.
-- **Git hook policy:** no force-push to `main`, no rewriting of published commits. A policy cannot be enforced technically without GitHub branch protection (which is a paid feature); instead, we rely on the clone-once-verify-later discipline: any party that clones this repo at any point has a local copy whose hashes must match any future re-clone. Divergence is detectable.
-- **Blockchain anchoring:** `events.jsonl.ots` is an OpenTimestamps proof that the hash of `events.jsonl` at a given commit existed on or before a specific moment in time, as confirmed by inclusion in a Bitcoin block. See `VERIFY.md` for the command to verify it.
+We document operational incidents in [`post-mortems/`](post-mortems/) and methodological gaps in [`DISCLOSURES.md`](DISCLOSURES.md) rather than editing history retroactively.
 
----
+### PM-001 — bear-to-bull mean-reversion event (May 2026)
 
-## Methodological corrections
+The most notable incident to date: a short-window bear-to-bull mean-reversion event in early May 2026 that materially impacted the daily model's cumulative figures under the original PT v2 configuration. We diagnosed the structural cause, deployed an operational refinement on May 7–9, and now run the canonical post-refinement instance in parallel with the frozen pre-refinement record. Neither has been edited.
 
-This log is preserved as-is. Methodological gaps detected during the
-run are documented transparently in [`DISCLOSURES.md`](DISCLOSURES.md)
-rather than retroactively edited in `events.jsonl`.
+See [`post-mortems/PM-001-2026-05-02.md`](post-mortems/PM-001-2026-05-02.md) for the full incident report — context, mechanism, diagnostic process, decision, and outcome.
 
-**Active disclosure (2026-04-15, session 48):** universe alignment
-between the paper trader and the canonical backtest. ~87 entries in
-the window 2026-04-13 21:41 UTC → 2026-04-15 22:00 UTC were affected
-by four progressively tightened gaps (B183/B184/B186/B188). Realized
-P&L unaffected (all closed trades pre-fix were correctly classified).
-Open positions were not manually closed. Future entries operate under
-the canonical universe. See `DISCLOSURES.md` for the full audit trail.
+This is the standard we hold: **operational events are owned, not hidden.**
+
+### Active methodological disclosures
+
+Detected gaps during the run are documented in [`DISCLOSURES.md`](DISCLOSURES.md). Notable active item:
+
+- **2026-04-15 universe alignment** (session 48): ~87 entries in the window 2026-04-13 21:41 UTC → 2026-04-15 22:00 UTC were affected by four progressively tightened gaps between paper trader and canonical backtest universe. Realized P&L unaffected; open positions were not manually closed; entries after the fix operate under the canonical universe.
 
 ---
 
 ## Disclaimers
 
 1. **No real trades.** This is a paper trading log. No capital is at risk; no orders are sent to Deribit; no positions exist. Every event is a simulation computed from public market data observed at the declared timestamp.
-2. **Execution fidelity is realistic-pessimistic.** Entries are simulated at the `best_bid` of the Deribit public book (worst plausible sale price), exits at the `best_ask` (worst plausible repurchase price). The full bid-ask spread is paid on each trade. Deribit taker fees are applied to every opening and closing leg. The resulting P&L is therefore a conservative lower bound on what a real execution could achieve — in practice, an institutional execution would typically fill somewhere in the spread and pay maker fees on at least some legs.
+2. **Execution fidelity is realistic-pessimistic.** Entries are simulated at the `best_bid` of the Deribit public book (worst plausible sale price), exits at the `best_ask` (worst plausible repurchase price). The full bid-ask spread is paid on each trade. Deribit taker fees are applied to every opening and closing leg. The resulting P&L is a conservative lower bound on what a real execution could achieve — in practice, an institutional execution would typically fill somewhere in the spread and pay maker fees on at least some legs.
 3. **No tax, no funding, no settlement risk.** The strategy is all-option; no perpetual hedge. Settlement in BTC-denominated inverse contracts. No USD conversion in the P&L. No tax computation. No counterparty or exchange risk modeled.
-4. **Model NOT disclosed.** The scoring model that decides entries is proprietary. This repo contains its outputs (which trades to open), not its internals. The audit is "did the declared trade execute consistently with the public book?", not "is the model's decision correct?".
-5. **Past performance ≠ future results.** Standard. Paper trading results are specific to the regime observed during the test period. Extrapolating to a different market regime is a research question, not a certainty.
-6. **License:** event data is CC-BY-4.0 — free to use, cite, and redistribute with attribution. The scoring model is not part of this license and remains proprietary.
+4. **Model NOT disclosed.** The scoring model that decides entries is proprietary. This repository contains its outputs (which trades to open), not its internals. The audit is "did the declared trade execute consistently with the public book?", not "is the model's decision correct?".
+5. **Past performance ≠ future results.** Paper trading results are specific to the regime observed during the test period. Extrapolating to a different market regime is a research question, not a certainty. The four-instance architecture is designed to test parameter variations across regimes; it does not eliminate regime risk.
+6. **Polya Technologies is a technology company.** We do not solicit investment, offer financial advice, or provide regulated financial services. This repository is a transparency artifact, not a solicitation.
+
+---
+
+## License
+
+Event data in this repository is published under **CC-BY-4.0** — free to use, cite, and redistribute with attribution. The trading model, pricing layer, execution heuristics, ranking parameters, and parameter values remain proprietary intellectual property of Polya Technologies and are **not disclosed in this repository**.
 
 ---
 
 ## About Polya Technologies
 
-Polya Technologies is an AI-native quantitative systems firm building proprietary trading systems on Bitcoin derivatives. This repository is the public audit trail of our paper trading phase — methodology proof before live capital deployment.
+Polya Technologies is an **AI-assisted proprietary trading firm** operating in Bitcoin derivatives. We design, calibrate, and operate our own quantitative models on a research-to-production stack built around an agentic AI pipeline. This repository is the public audit trail of our paper-trading phase — methodology proof before live capital deployment.
 
-- Founder: Daniel Radicchi ([linkedin.com/in/daniel-radicchi](https://linkedin.com/in/daniel-radicchi))
+- Site: [polyatechnologies.com](https://polyatechnologies.com)
+- Founder: [Daniel Radicchi](https://linkedin.com/in/daniel-radicchi)
 - Stage: late pre-seed
-- Contact: dradicchi at gmail.com
+- Contact: [contact@polyatechnologies.com](mailto:contact@polyatechnologies.com)
 - Audit inquiries: open an issue on this repository

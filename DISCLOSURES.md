@@ -1086,3 +1086,70 @@ section.
 The principle remains: **transparency over silent revision** — refinements
 are reversible when evidence accumulates against them, and the reversal
 is documented at the time of decision, not retroactively.
+
+## 2026-06-09 (session 90): Tail-hedge overlay instances + control arm
+
+### What
+
+Three new paper-trading instances went live, forming a controlled
+three-arm experiment on the daily horizon:
+
+- **`partial_clean`** — control arm: the existing daily configuration with
+  **no hedge** (naked short).
+- **`partial_k2_2pct` / `partial_k2_5pct`** — the same short leg plus a
+  **protective long call leg** further out-of-the-money on the same daily
+  expiration, forming a short call spread. The two instances differ only in
+  how far out the protective leg sits.
+
+The three arms share a **byte-identical short leg** (same selection, same
+exit discipline) and differ only in the long protective leg. This isolates
+the effect of the tail hedge on returns and drawdown, trade-for-trade.
+
+### Why
+
+A prior research effort concluded that a tail hedge on this strategy is
+**not expected-value accretive** — like any tail insurance, it is paid on
+every trade and pays back only in the tail (consistent with the tail-hedge
+literature: Spitznagel; Brown 2012). It is positioned as a **product
+profile** (a tail-risk-cut variant for risk-averse mandates), not as an
+alpha source. The backtest systematically **overstates** such hedges
+because it is blind to the settlement-gap dynamics where the real adverse
+events occur; the only way to measure the live cost-versus-protection
+trade-off honestly is to run it forward in paper trading. The control arm
+makes the comparison clean.
+
+### Correction made at go-live
+
+The live integration immediately surfaced a modeling gap that neither the
+backtest nor synthetic unit tests would expose: when the short leg is
+already further out-of-the-money than the hedge's nominal gap, the naive
+strike target for the protective leg collapsed onto the **same strike as
+the short leg** — a degenerate zero-width spread (cost with no protection).
+The selection rule was corrected on the spot to require the protective leg
+to sit **strictly above** the short strike (a valid spread by construction)
+and verified live before further entries.
+
+### What is not changing
+
+- **The data collected before the correction is preserved as-is.** Two
+  degenerate spreads were opened on the 2%-gap instance before the fix;
+  they are left to settle naturally rather than edited out of the already-
+  published history. Analysis of the experiment simply excludes them, along
+  with the brief window before the control arm started.
+- **The short leg and all prior instances are unaffected** — the hedge is a
+  new, separate overlay; the existing naked configurations are unchanged.
+- **The model itself remains proprietary** (see `README.md`). What is
+  disclosed here is the *structure* of the overlay and the correction, not
+  the scoring internals.
+
+### How to verify
+
+The hedge instances publish under `instances/partial_k2_2pct/`,
+`instances/partial_k2_5pct/`, and the control under
+`instances/partial_clean/`. Forthcoming reports discriminate the protective
+leg's P&L from the short leg's, so the cost of the hedge in calm regimes and
+its payoff in tail events can be read directly.
+
+The principle remains: **transparency over silent revision** — the
+correction is documented at the time it was made, and the pre-correction
+data stays in the public log.

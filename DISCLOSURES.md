@@ -1129,27 +1129,44 @@ The selection rule was corrected on the spot to require the protective leg
 to sit **strictly above** the short strike (a valid spread by construction)
 and verified live before further entries.
 
+### Scope and synchronized reset
+
+Two refinements were applied right after the instances went live, and both
+are disclosed here rather than applied silently:
+
+- **Daily-only scope.** The three instances are restricted to the daily
+  expiration — that is where the protective leg lives. Any weekly/monthly
+  entries on these instances would be naked (identical across the three) and
+  would only add noise to the comparison.
+- **Synchronized reset.** The control arm started a few hours after the two
+  hedged arms (it was added shortly after them), so the three did not begin
+  from the same state. A clean controlled experiment requires all three arms
+  to start together. The three instances were therefore **reset to a
+  synchronized clean start**: the few hours of pre-reset data — including the
+  two degenerate spreads from before the strike-selection fix — were cleared
+  from these three instances so the experiment begins trade-for-trade aligned.
+  This reset is **disclosed at the time it was made**; it touches only the
+  three new experiment instances. All other instances and their history are
+  untouched.
+
 ### What is not changing
 
-- **The data collected before the correction is preserved as-is.** Two
-  degenerate spreads were opened on the 2%-gap instance before the fix;
-  they are left to settle naturally rather than edited out of the already-
-  published history. Analysis of the experiment simply excludes them, along
-  with the brief window before the control arm started.
 - **The short leg and all prior instances are unaffected** — the hedge is a
-  new, separate overlay; the existing naked configurations are unchanged.
+  new, separate overlay; the existing naked configurations are unchanged, and
+  none of their published history is altered.
 - **The model itself remains proprietary** (see `README.md`). What is
-  disclosed here is the *structure* of the overlay and the correction, not
-  the scoring internals.
+  disclosed here is the *structure* of the overlay, the correction, and the
+  reset — not the scoring internals.
 
 ### How to verify
 
 The hedge instances publish under `instances/partial_k2_2pct/`,
 `instances/partial_k2_5pct/`, and the control under
-`instances/partial_clean/`. Forthcoming reports discriminate the protective
-leg's P&L from the short leg's, so the cost of the hedge in calm regimes and
-its payoff in tail events can be read directly.
+`instances/partial_clean/`, all from the synchronized start. Forthcoming
+reports discriminate the protective leg's P&L from the short leg's, so the
+cost of the hedge in calm regimes and its payoff in tail events can be read
+directly.
 
 The principle remains: **transparency over silent revision** — the
-correction is documented at the time it was made, and the pre-correction
-data stays in the public log.
+correction and the reset are documented at the time they were made, and only
+the three new experiment instances are affected.

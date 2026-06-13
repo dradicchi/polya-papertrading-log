@@ -367,5 +367,14 @@
     "exec_btc": 0.001,
     "im_btc": 0.1,
     "exit_target_btc": 0.0001
+  },
+  {
+    "event_id": "9ac569891b15ef0c",
+    "horizon": "daily",
+    "instrument": "BTC-16JUN26-67000-C",
+    "ts_entry": "2026-06-13T17:00:06.225Z",
+    "exec_btc": 0.0008,
+    "im_btc": 0.102932,
+    "exit_target_btc": 8e-05
   }
 ]

@@ -43,10 +43,12 @@ Since May 9, 2026, the paper-trading system runs four parallel parameter configu
 
 Across 16 days, 92 closed trades:
 
-- Annualized ROI on AUM: **+111.7%**
+- Annualized ROI on CEA: **+111.7%**
 - Daily Sharpe ratio: **+9.99**
 - Win rate: **90%**
-- Max drawdown: **−0.3%** of AUM
+- Max drawdown: **−0.3%** of CEA
+
+_CEA (Capital Effectively Allocated) = peak simultaneous initial margin × 1.25 — the capital actually at risk (the metric previously labeled "AUM"; see [`DISCLOSURES.md`](DISCLOSURES.md))._
 
 The full cross-instance, cross-horizon metrics are published in [`reports/`](reports/) and refresh per closed cycle. Live event stream in [`events.jsonl`](events.jsonl). The canonical pricing-and-execution stack runs without experimental overrides; the two override instances are under live evaluation.
 

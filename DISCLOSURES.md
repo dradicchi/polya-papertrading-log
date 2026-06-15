@@ -1170,3 +1170,40 @@ directly.
 The principle remains: **transparency over silent revision** — the
 correction and the reset are documented at the time they were made, and only
 the three new experiment instances are affected.
+
+
+---
+
+## 2026-06-15 (session 93): Capital terminology — "AUM" replaced by CEA / pot
+
+### What changed, in plain language
+
+Earlier reports labeled the strategy's working capital as **AUM**. That label
+was imprecise: internally it was used for two different quantities — the
+capital actually deployed at peak, and the total fund committed by the
+investor. Going forward these are named explicitly:
+
+- **CEA (Capital Effectively Allocated)** = peak simultaneous initial margin
+  × 1.25 (MtM buffer). The capital actually at risk, and the denominator of
+  the canonical ROI. It is exactly the quantity previously labeled "AUM" in
+  these reports.
+- **pot** = the total fund committed by the investor (the working-capital
+  envelope; CEA ≤ pot).
+
+### What this is — and is not
+
+- **A label change, not a methodological change.** No number is affected.
+  `ROI = PnL_net / CEA` is the same ratio previously printed as
+  `ROI = PnL_net / AUM`; the formula and the values are unchanged.
+- **Forward-only.** Reports published from this date use "CEA". Reports
+  already published (`reports/`, `instances/*/reports/`) retain "AUM"
+  verbatim as point-in-time records — they are not retroactively edited,
+  consistent with this document's principle of transparency over silent
+  revision.
+- **"AUM" keeps its standard meaning elsewhere.** Where these materials
+  discuss a future fund managing third-party capital, "AUM" is used in its
+  ordinary industry sense (assets under management on behalf of others). The
+  rename concerns only the project's own deployed / committed capital.
+
+The principle remains: **transparency over silent revision** — the change is
+documented at the time it is made, and no published figure is altered.

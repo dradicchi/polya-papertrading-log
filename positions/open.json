@@ -801,60 +801,6 @@
     "exit_target_btc": 0.0001
   },
   {
-    "event_id": "9ac569891b15ef0c",
-    "horizon": "daily",
-    "instrument": "BTC-16JUN26-67000-C",
-    "ts_entry": "2026-06-13T17:00:06.225Z",
-    "exec_btc": 0.0008,
-    "im_btc": 0.102932,
-    "exit_target_btc": 8e-05
-  },
-  {
-    "event_id": "80d9a9cd0d495603",
-    "horizon": "daily",
-    "instrument": "BTC-16JUN26-67000-C",
-    "ts_entry": "2026-06-13T17:00:06.387Z",
-    "exec_btc": 0.0008,
-    "im_btc": 0.102932,
-    "exit_target_btc": 8e-05
-  },
-  {
-    "event_id": "3559409cbb86f5af",
-    "horizon": "daily",
-    "instrument": "BTC-16JUN26-67000-C",
-    "ts_entry": "2026-06-13T17:00:06.528Z",
-    "exec_btc": 0.0008,
-    "im_btc": 0.102932,
-    "exit_target_btc": 8e-05
-  },
-  {
-    "event_id": "f18e5485cb1eae4e",
-    "horizon": "daily",
-    "instrument": "BTC-16JUN26-67000-C",
-    "ts_entry": "2026-06-13T17:00:06.670Z",
-    "exec_btc": 0.0008,
-    "im_btc": 0.102932,
-    "exit_target_btc": 8e-05
-  },
-  {
-    "event_id": "98f79734166fe0d2",
-    "horizon": "daily",
-    "instrument": "BTC-16JUN26-67000-C",
-    "ts_entry": "2026-06-13T17:00:06.716Z",
-    "exec_btc": 0.0008,
-    "im_btc": 0.102932,
-    "exit_target_btc": 8e-05
-  },
-  {
-    "event_id": "d56dae73ce750eed",
-    "horizon": "daily",
-    "instrument": "BTC-16JUN26-67000-C",
-    "ts_entry": "2026-06-13T17:00:06.768Z",
-    "exec_btc": 0.0008,
-    "im_btc": 0.102932,
-    "exit_target_btc": 8e-05
-  },
-  {
     "event_id": "7b37689f27c5c184",
     "horizon": "daily",
     "instrument": "BTC-17JUN26-65000-C",
@@ -1296,15 +1242,6 @@
     "exit_target_btc": 0.00033
   },
   {
-    "event_id": "49ff6a5a21aa6aa1",
-    "horizon": "daily",
-    "instrument": "BTC-16JUN26-66500-C",
-    "ts_entry": "2026-06-15T00:00:06.272Z",
-    "exec_btc": 0.0041,
-    "im_btc": 0.138049,
-    "exit_target_btc": 0.00041000000000000005
-  },
-  {
     "event_id": "4cf54c35dc4395ef",
     "horizon": "daily",
     "instrument": "BTC-17JUN26-69000-C",
@@ -1357,15 +1294,6 @@
     "exec_btc": 0.0065,
     "im_btc": 0.13044,
     "exit_target_btc": 0.00065
-  },
-  {
-    "event_id": "e762315909f6fe9b",
-    "horizon": "daily",
-    "instrument": "BTC-16JUN26-66500-C",
-    "ts_entry": "2026-06-15T00:00:06.406Z",
-    "exec_btc": 0.0041,
-    "im_btc": 0.138049,
-    "exit_target_btc": 0.00041000000000000005
   },
   {
     "event_id": "aefeaf9d1da8227c",
@@ -1422,15 +1350,6 @@
     "exit_target_btc": 0.00065
   },
   {
-    "event_id": "51ee2da3b1fd65ad",
-    "horizon": "daily",
-    "instrument": "BTC-16JUN26-66500-C",
-    "ts_entry": "2026-06-15T00:00:06.556Z",
-    "exec_btc": 0.0041,
-    "im_btc": 0.138049,
-    "exit_target_btc": 0.00041000000000000005
-  },
-  {
     "event_id": "5b07655e3eadd382",
     "horizon": "daily",
     "instrument": "BTC-17JUN26-66000-C",
@@ -1483,15 +1402,6 @@
     "exec_btc": 0.0065,
     "im_btc": 0.13044,
     "exit_target_btc": 0.00065
-  },
-  {
-    "event_id": "0f9792ff0f393026",
-    "horizon": "daily",
-    "instrument": "BTC-16JUN26-66500-C",
-    "ts_entry": "2026-06-15T00:00:06.640Z",
-    "exec_btc": 0.0041,
-    "im_btc": 0.138049,
-    "exit_target_btc": 0.00041000000000000005
   },
   {
     "event_id": "395dc5e1bfdcc1ab",
@@ -1548,15 +1458,6 @@
     "exit_target_btc": 0.00065
   },
   {
-    "event_id": "217155a52fef9536",
-    "horizon": "daily",
-    "instrument": "BTC-16JUN26-66500-C",
-    "ts_entry": "2026-06-15T00:00:06.756Z",
-    "exec_btc": 0.0041,
-    "im_btc": 0.138049,
-    "exit_target_btc": 0.00041000000000000005
-  },
-  {
     "event_id": "ae0d11f0ccd2ecfc",
     "horizon": "daily",
     "instrument": "BTC-17JUN26-66000-C",
@@ -1609,15 +1510,6 @@
     "exec_btc": 0.0065,
     "im_btc": 0.13044,
     "exit_target_btc": 0.00065
-  },
-  {
-    "event_id": "8f2a0547c560c639",
-    "horizon": "daily",
-    "instrument": "BTC-16JUN26-66500-C",
-    "ts_entry": "2026-06-15T00:00:06.937Z",
-    "exec_btc": 0.0041,
-    "im_btc": 0.138049,
-    "exit_target_btc": 0.00041000000000000005
   },
   {
     "event_id": "1e22b6fc1e422966",

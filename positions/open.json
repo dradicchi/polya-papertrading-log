@@ -891,15 +891,6 @@
     "exit_target_btc": 0.00016
   },
   {
-    "event_id": "73db5db198dcd391",
-    "horizon": "daily",
-    "instrument": "BTC-18JUN26-65000-C",
-    "ts_entry": "2026-06-17T08:40:06.061Z",
-    "exec_btc": 0.0075,
-    "im_btc": 0.14854,
-    "exit_target_btc": 0.00075
-  },
-  {
     "event_id": "a8da068a5b54a8c1",
     "horizon": "daily",
     "instrument": "BTC-20JUN26-65000-C",
@@ -907,15 +898,6 @@
     "exec_btc": 0.012,
     "im_btc": 0.14854,
     "exit_target_btc": 0.0012000000000000001
-  },
-  {
-    "event_id": "37c934b8fd6241f5",
-    "horizon": "daily",
-    "instrument": "BTC-18JUN26-65000-C",
-    "ts_entry": "2026-06-17T08:40:06.377Z",
-    "exec_btc": 0.0075,
-    "im_btc": 0.14854,
-    "exit_target_btc": 0.00075
   },
   {
     "event_id": "456e01ad2e4b94ec",
@@ -927,15 +909,6 @@
     "exit_target_btc": 0.0012000000000000001
   },
   {
-    "event_id": "b9ac81a39ecdfa54",
-    "horizon": "daily",
-    "instrument": "BTC-18JUN26-65000-C",
-    "ts_entry": "2026-06-17T08:40:06.463Z",
-    "exec_btc": 0.0075,
-    "im_btc": 0.14854,
-    "exit_target_btc": 0.00075
-  },
-  {
     "event_id": "50b3b3a4c7c6df6f",
     "horizon": "daily",
     "instrument": "BTC-20JUN26-65000-C",
@@ -945,15 +918,6 @@
     "exit_target_btc": 0.0012000000000000001
   },
   {
-    "event_id": "ef3529449a7cb714",
-    "horizon": "daily",
-    "instrument": "BTC-18JUN26-65000-C",
-    "ts_entry": "2026-06-17T08:40:06.538Z",
-    "exec_btc": 0.0075,
-    "im_btc": 0.14854,
-    "exit_target_btc": 0.00075
-  },
-  {
     "event_id": "86be8f060004b18f",
     "horizon": "daily",
     "instrument": "BTC-20JUN26-65000-C",
@@ -961,15 +925,6 @@
     "exec_btc": 0.012,
     "im_btc": 0.14854,
     "exit_target_btc": 0.0012000000000000001
-  },
-  {
-    "event_id": "960e7fa15b0423d5",
-    "horizon": "daily",
-    "instrument": "BTC-18JUN26-65000-C",
-    "ts_entry": "2026-06-17T08:40:06.628Z",
-    "exec_btc": 0.0075,
-    "im_btc": 0.14854,
-    "exit_target_btc": 0.00075
   },
   {
     "event_id": "bda270b4a93c13f5",

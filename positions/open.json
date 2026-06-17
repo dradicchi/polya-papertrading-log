@@ -810,15 +810,6 @@
     "exit_target_btc": 0.00018
   },
   {
-    "event_id": "21596e1f42dd41d4",
-    "horizon": "daily",
-    "instrument": "BTC-18JUN26-65500-C",
-    "ts_entry": "2026-06-17T01:23:07.521Z",
-    "exec_btc": 0.0085,
-    "im_btc": 0.149349,
-    "exit_target_btc": 0.0008500000000000001
-  },
-  {
     "event_id": "69b23319c9b92d47",
     "horizon": "daily",
     "instrument": "BTC-20JUN26-65500-C",
@@ -826,15 +817,6 @@
     "exec_btc": 0.012,
     "im_btc": 0.149349,
     "exit_target_btc": 0.0012000000000000001
-  },
-  {
-    "event_id": "a882185b4b4f139e",
-    "horizon": "daily",
-    "instrument": "BTC-18JUN26-65500-C",
-    "ts_entry": "2026-06-17T01:23:07.708Z",
-    "exec_btc": 0.0085,
-    "im_btc": 0.149349,
-    "exit_target_btc": 0.0008500000000000001
   },
   {
     "event_id": "8ec72ca0e7b3090f",
@@ -846,15 +828,6 @@
     "exit_target_btc": 0.0012000000000000001
   },
   {
-    "event_id": "84a4215373437b09",
-    "horizon": "daily",
-    "instrument": "BTC-18JUN26-65500-C",
-    "ts_entry": "2026-06-17T01:23:07.858Z",
-    "exec_btc": 0.0085,
-    "im_btc": 0.149349,
-    "exit_target_btc": 0.0008500000000000001
-  },
-  {
     "event_id": "05414c42f833b492",
     "horizon": "daily",
     "instrument": "BTC-20JUN26-65500-C",
@@ -864,15 +837,6 @@
     "exit_target_btc": 0.0012000000000000001
   },
   {
-    "event_id": "bb7ea0dc9d5871a5",
-    "horizon": "daily",
-    "instrument": "BTC-18JUN26-65500-C",
-    "ts_entry": "2026-06-17T01:23:07.939Z",
-    "exec_btc": 0.0085,
-    "im_btc": 0.149349,
-    "exit_target_btc": 0.0008500000000000001
-  },
-  {
     "event_id": "75dafe193f0c1b68",
     "horizon": "daily",
     "instrument": "BTC-20JUN26-65500-C",
@@ -880,15 +844,6 @@
     "exec_btc": 0.012,
     "im_btc": 0.149349,
     "exit_target_btc": 0.0012000000000000001
-  },
-  {
-    "event_id": "f121c3acb4ac1fa0",
-    "horizon": "daily",
-    "instrument": "BTC-18JUN26-65500-C",
-    "ts_entry": "2026-06-17T01:23:08.078Z",
-    "exec_btc": 0.0085,
-    "im_btc": 0.149349,
-    "exit_target_btc": 0.0008500000000000001
   },
   {
     "event_id": "2a4e1f46eefc4420",

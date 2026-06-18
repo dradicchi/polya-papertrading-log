@@ -1227,3 +1227,16 @@ with a companion resilience note at
 [`analysis/regeneration-pm-cycle-2026-06.md`](analysis/regeneration-pm-cycle-2026-06.md).
 A residual in-the-money tail was still settling at publication; figures are
 provisional in that respect.
+
+---
+
+## 2026-06-08 (published 2026-06-18, session 95): Second tail event — a rebound that reversed
+
+Recorded for completeness, out of chronological order, to close the numbering
+between PM-001 and PM-003. A ~+4% BTC rebound over two days (~2%/day) briefly
+pushed near-the-money short CALLs toward in-the-money, then **reversed** before
+settlement consolidated — the latent exposure decayed back into gains. Net
+effect immaterial; the deeper out-of-the-money configuration was immune; no
+stopping rule, no methodology change. PM-002 is the mirror-image case: the
+adverse move did not persist, which is precisely why it left no mark. Detail:
+**[`post-mortems/PM-002-2026-06-08.md`](post-mortems/PM-002-2026-06-08.md)**.

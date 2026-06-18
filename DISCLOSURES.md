@@ -1207,3 +1207,23 @@ investor. Going forward these are named explicitly:
 
 The principle remains: **transparency over silent revision** — the change is
 documented at the time it is made, and no published figure is altered.
+
+---
+
+## 2026-06-16 (session 95): Third tail event (grind variant) — post-mortem published
+
+A +9% BTC rally delivered slowly over six days (~1.5% per day, no reversal)
+pushed the near-the-money daily book's short CALLs to settle in-the-money,
+for a core realized drawdown of about −0.14 BTC (paper, 1 contract per
+signal). Two structural facts set it apart from the prior tail event: the
+move was **too slow** for the fixed-strike tail hedge to pay (0 of 41 hedged
+trades), and a deeper out-of-the-money configuration was effectively immune.
+No stopping rule fired; cumulative P&L stayed positive throughout and the
+book began regenerating the next day. No methodology change is made.
+
+The detailed post-mortem is at
+**[`post-mortems/PM-003-2026-06-16.md`](post-mortems/PM-003-2026-06-16.md)**,
+with a companion resilience note at
+[`analysis/regeneration-pm-cycle-2026-06.md`](analysis/regeneration-pm-cycle-2026-06.md).
+A residual in-the-money tail was still settling at publication; figures are
+provisional in that respect.

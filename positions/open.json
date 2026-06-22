@@ -540,33 +540,6 @@
     "exit_target_btc": 0.00016
   },
   {
-    "event_id": "774c993fa1b34af2",
-    "horizon": "weekly",
-    "instrument": "BTC-3JUL26-73000-C",
-    "ts_entry": "2026-06-12T15:14:06.420Z",
-    "exec_btc": 0.0033,
-    "im_btc": 0.1,
-    "exit_target_btc": 0.00033
-  },
-  {
-    "event_id": "1be833d52519be3c",
-    "horizon": "weekly",
-    "instrument": "BTC-3JUL26-73000-C",
-    "ts_entry": "2026-06-12T15:14:06.590Z",
-    "exec_btc": 0.0033,
-    "im_btc": 0.1,
-    "exit_target_btc": 0.00033
-  },
-  {
-    "event_id": "2c35867c6a7a026c",
-    "horizon": "weekly",
-    "instrument": "BTC-3JUL26-73000-C",
-    "ts_entry": "2026-06-12T15:14:06.726Z",
-    "exec_btc": 0.0033,
-    "im_btc": 0.1,
-    "exit_target_btc": 0.00033
-  },
-  {
     "event_id": "b74aac691b2b4412",
     "horizon": "daily",
     "instrument": "BTC-24JUN26-67000-C",
@@ -889,51 +862,6 @@
     "exec_btc": 0.001,
     "im_btc": 0.107066,
     "exit_target_btc": 0.0001
-  },
-  {
-    "event_id": "079e017635d0e9cb",
-    "horizon": "daily",
-    "instrument": "BTC-23JUN26-65000-C",
-    "ts_entry": "2026-06-21T07:50:10.578Z",
-    "exec_btc": 0.0046,
-    "im_btc": 0.136965,
-    "exit_target_btc": 0.00046
-  },
-  {
-    "event_id": "7dca49ec0eaa73e3",
-    "horizon": "daily",
-    "instrument": "BTC-23JUN26-65000-C",
-    "ts_entry": "2026-06-21T07:50:10.751Z",
-    "exec_btc": 0.0046,
-    "im_btc": 0.136965,
-    "exit_target_btc": 0.00046
-  },
-  {
-    "event_id": "aac1f06b5545c091",
-    "horizon": "daily",
-    "instrument": "BTC-23JUN26-65000-C",
-    "ts_entry": "2026-06-21T07:50:10.882Z",
-    "exec_btc": 0.0046,
-    "im_btc": 0.136965,
-    "exit_target_btc": 0.00046
-  },
-  {
-    "event_id": "66a8c92f44371f79",
-    "horizon": "daily",
-    "instrument": "BTC-23JUN26-65000-C",
-    "ts_entry": "2026-06-21T07:50:10.965Z",
-    "exec_btc": 0.0046,
-    "im_btc": 0.136965,
-    "exit_target_btc": 0.00046
-  },
-  {
-    "event_id": "4d56baead5632d3e",
-    "horizon": "daily",
-    "instrument": "BTC-23JUN26-65000-C",
-    "ts_entry": "2026-06-21T07:50:11.046Z",
-    "exec_btc": 0.0046,
-    "im_btc": 0.136965,
-    "exit_target_btc": 0.00046
   },
   {
     "event_id": "4f6d11d08a4e35d8",

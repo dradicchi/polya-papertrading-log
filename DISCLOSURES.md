@@ -1228,6 +1228,13 @@ with a companion resilience note at
 A residual in-the-money tail was still settling at publication; figures are
 provisional in that respect.
 
+**Follow-up (June 24):** over the recovery, a controlled comparison
+(byte-identical short legs) isolates the hedge cost exactly — the tail-hedge
+variant stayed underwater while the unhedged control returned to positive, the
+hedge premium (zero payoff in the grind) consuming roughly 43% of the short
+leg's recovery. Second live confirmation that the hedge is EV-negative outside
+catastrophic flash events. See the post-mortem's *Follow-up* section.
+
 ---
 
 ## 2026-06-08 (published 2026-06-18, session 95): Second tail event — a rebound that reversed

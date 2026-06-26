@@ -277,5 +277,77 @@
     "exec_btc": 0.0004,
     "im_btc": 0.1,
     "exit_target_btc": 4e-05
+  },
+  {
+    "event_id": "73143807334d2af7",
+    "horizon": "weekly",
+    "instrument": "BTC-10JUL26-75000-C",
+    "ts_entry": "2026-06-26T00:00:06.862Z",
+    "exec_btc": 0.0006,
+    "im_btc": 0.1,
+    "exit_target_btc": 5.9999999999999995e-05
+  },
+  {
+    "event_id": "7f6725f41ec38ef1",
+    "horizon": "weekly",
+    "instrument": "BTC-10JUL26-72000-C",
+    "ts_entry": "2026-06-26T00:00:06.871Z",
+    "exec_btc": 0.0008,
+    "im_btc": 0.1,
+    "exit_target_btc": 8e-05
+  },
+  {
+    "event_id": "2532d84fb5d2b326",
+    "horizon": "daily",
+    "instrument": "BTC-27JUN26-62500-C",
+    "ts_entry": "2026-06-26T00:00:06.880Z",
+    "exec_btc": 0.0006,
+    "im_btc": 0.103394,
+    "exit_target_btc": 5.9999999999999995e-05
+  },
+  {
+    "event_id": "eb3a127d3086cf4d",
+    "horizon": "daily",
+    "instrument": "BTC-28JUN26-63500-C",
+    "ts_entry": "2026-06-26T00:00:06.883Z",
+    "exec_btc": 0.0006,
+    "im_btc": 0.1,
+    "exit_target_btc": 5.9999999999999995e-05
+  },
+  {
+    "event_id": "182dd4fdbd966216",
+    "horizon": "daily",
+    "instrument": "BTC-28JUN26-63000-C",
+    "ts_entry": "2026-06-26T00:00:06.886Z",
+    "exec_btc": 0.0008,
+    "im_btc": 0.1,
+    "exit_target_btc": 8e-05
+  },
+  {
+    "event_id": "f06cf8f81b8e3b7a",
+    "horizon": "daily",
+    "instrument": "BTC-29JUN26-67000-C",
+    "ts_entry": "2026-06-26T00:00:06.889Z",
+    "exec_btc": 0.0005,
+    "im_btc": 0.1,
+    "exit_target_btc": 5e-05
+  },
+  {
+    "event_id": "b47ab636cd9a6302",
+    "horizon": "daily",
+    "instrument": "BTC-29JUN26-66000-C",
+    "ts_entry": "2026-06-26T00:00:06.892Z",
+    "exec_btc": 0.0006,
+    "im_btc": 0.1,
+    "exit_target_btc": 5.9999999999999995e-05
+  },
+  {
+    "event_id": "f3888d06f7599c17",
+    "horizon": "daily",
+    "instrument": "BTC-29JUN26-65000-C",
+    "ts_entry": "2026-06-26T00:00:06.895Z",
+    "exec_btc": 0.0007,
+    "im_btc": 0.1,
+    "exit_target_btc": 7.000000000000001e-05
   }
 ]

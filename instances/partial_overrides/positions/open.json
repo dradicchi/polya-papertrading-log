@@ -304,5 +304,77 @@
     "exec_btc": 0.0004,
     "im_btc": 0.1,
     "exit_target_btc": 4e-05
+  },
+  {
+    "event_id": "e1242c2df492580d",
+    "horizon": "weekly",
+    "instrument": "BTC-10JUL26-75000-C",
+    "ts_entry": "2026-06-26T00:00:07.040Z",
+    "exec_btc": 0.0006,
+    "im_btc": 0.1,
+    "exit_target_btc": 5.9999999999999995e-05
+  },
+  {
+    "event_id": "e5a23cd97dac4edc",
+    "horizon": "weekly",
+    "instrument": "BTC-10JUL26-72000-C",
+    "ts_entry": "2026-06-26T00:00:07.046Z",
+    "exec_btc": 0.0008,
+    "im_btc": 0.1,
+    "exit_target_btc": 8e-05
+  },
+  {
+    "event_id": "09b33fab88cfb452",
+    "horizon": "daily",
+    "instrument": "BTC-27JUN26-60000-C",
+    "ts_entry": "2026-06-26T00:00:07.060Z",
+    "exec_btc": 0.008,
+    "im_btc": 0.145259,
+    "exit_target_btc": 0.0008
+  },
+  {
+    "event_id": "614fe4506e9b33ed",
+    "horizon": "daily",
+    "instrument": "BTC-28JUN26-60500-C",
+    "ts_entry": "2026-06-26T00:00:07.065Z",
+    "exec_btc": 0.0065,
+    "im_btc": 0.136877,
+    "exit_target_btc": 0.00065
+  },
+  {
+    "event_id": "5cb318d3b843b65f",
+    "horizon": "daily",
+    "instrument": "BTC-28JUN26-61000-C",
+    "ts_entry": "2026-06-26T00:00:07.072Z",
+    "exec_btc": 0.0042,
+    "im_btc": 0.128504,
+    "exit_target_btc": 0.00042
+  },
+  {
+    "event_id": "e0b953639e1dd2c8",
+    "horizon": "daily",
+    "instrument": "BTC-29JUN26-60000-C",
+    "ts_entry": "2026-06-26T00:00:07.079Z",
+    "exec_btc": 0.0125,
+    "im_btc": 0.145259,
+    "exit_target_btc": 0.0012500000000000002
+  },
+  {
+    "event_id": "ce9f03d4700b34e0",
+    "horizon": "daily",
+    "instrument": "BTC-29JUN26-60500-C",
+    "ts_entry": "2026-06-26T00:00:07.083Z",
+    "exec_btc": 0.009,
+    "im_btc": 0.136886,
+    "exit_target_btc": 0.0009
+  },
+  {
+    "event_id": "188de07322c87f42",
+    "horizon": "daily",
+    "instrument": "BTC-29JUN26-61000-C",
+    "ts_entry": "2026-06-26T00:00:07.087Z",
+    "exec_btc": 0.006,
+    "im_btc": 0.128513,
+    "exit_target_btc": 0.0006000000000000001
   }
 ]

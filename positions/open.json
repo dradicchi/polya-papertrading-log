@@ -549,15 +549,6 @@
     "exit_target_btc": 0.0009
   },
   {
-    "event_id": "8edef095d549bb1f",
-    "horizon": "daily",
-    "instrument": "BTC-29JUN26-61000-C",
-    "ts_entry": "2026-06-26T00:00:06.978Z",
-    "exec_btc": 0.006,
-    "im_btc": 0.128513,
-    "exit_target_btc": 0.0006000000000000001
-  },
-  {
     "event_id": "e5a23cd97dac4edc",
     "horizon": "weekly",
     "instrument": "BTC-10JUL26-72000-C",
@@ -585,15 +576,6 @@
     "exit_target_btc": 0.0009
   },
   {
-    "event_id": "188de07322c87f42",
-    "horizon": "daily",
-    "instrument": "BTC-29JUN26-61000-C",
-    "ts_entry": "2026-06-26T00:00:07.087Z",
-    "exec_btc": 0.006,
-    "im_btc": 0.128513,
-    "exit_target_btc": 0.0006000000000000001
-  },
-  {
     "event_id": "88e88a5cdad568d0",
     "horizon": "daily",
     "instrument": "BTC-29JUN26-60000-C",
@@ -610,15 +592,6 @@
     "exec_btc": 0.009,
     "im_btc": 0.136886,
     "exit_target_btc": 0.0009
-  },
-  {
-    "event_id": "419451a447366997",
-    "horizon": "daily",
-    "instrument": "BTC-29JUN26-61000-C",
-    "ts_entry": "2026-06-26T00:00:07.186Z",
-    "exec_btc": 0.006,
-    "im_btc": 0.128513,
-    "exit_target_btc": 0.0006000000000000001
   },
   {
     "event_id": "775e37c0db5d1f8b",
@@ -639,15 +612,6 @@
     "exit_target_btc": 0.0009
   },
   {
-    "event_id": "5af1203e03752165",
-    "horizon": "daily",
-    "instrument": "BTC-29JUN26-61000-C",
-    "ts_entry": "2026-06-26T00:00:07.301Z",
-    "exec_btc": 0.006,
-    "im_btc": 0.128513,
-    "exit_target_btc": 0.0006000000000000001
-  },
-  {
     "event_id": "f3b2b74dcdf8afb8",
     "horizon": "daily",
     "instrument": "BTC-29JUN26-60000-C",
@@ -664,15 +628,6 @@
     "exec_btc": 0.009,
     "im_btc": 0.136886,
     "exit_target_btc": 0.0009
-  },
-  {
-    "event_id": "d08bbc3220cbe29c",
-    "horizon": "daily",
-    "instrument": "BTC-29JUN26-61000-C",
-    "ts_entry": "2026-06-26T00:00:07.407Z",
-    "exec_btc": 0.006,
-    "im_btc": 0.128513,
-    "exit_target_btc": 0.0006000000000000001
   },
   {
     "event_id": "ae2f5d01916aacdc",

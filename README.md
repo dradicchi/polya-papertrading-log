@@ -28,16 +28,17 @@ Polya Technologies is an **AI-assisted proprietary trading firm** — no externa
 
 **42 days since go-live** · Apr 13 → May 24, 2026 · Capital pot: 20 BTC
 
-### Architecture: four instances running in parallel
+### Architecture: parallel instances
 
-Since May 9, 2026, the paper-trading system runs four parallel parameter configurations to isolate the operational effect of strategy parameters and preserve experimental optionality without losing the historical baseline:
+The paper-trading system runs several parallel parameter configurations to isolate the operational effect of strategy parameters and preserve experimental optionality without losing the historical baseline. **Each instance publishes its own reports** under `instances/<id>/reports/` (`weekly/` and `monthly/`); each report leads with the **cumulative-since-go-live** metrics, then the **cycle window**:
 
-| Instance | Status | Configuration |
+| Instance | Status | Reports |
 |---|---|---|
-| `legacy_v2.1` | Frozen on May 9 | Original PT v2 configuration; preserved for historical reference (includes the PM-001 event window) |
-| `canonical` | Active since May 9 | Reference instance, no experimental overrides — the raw model |
-| `full_overrides` | Active since May 9 | Experimental configuration A (under live evaluation) |
-| `partial_overrides` | Active since May 9 | Experimental configuration B (under live evaluation) |
+| `canonical` | Active since May 9 | reference instance, no overrides — [weekly](instances/canonical/reports/weekly/) · [monthly](instances/canonical/reports/monthly/) |
+| `full_overrides` | Active since May 9 | experimental config A — [weekly](instances/full_overrides/reports/weekly/) · [monthly](instances/full_overrides/reports/monthly/) |
+| `partial_overrides` | Active since May 9 | experimental config B — [weekly](instances/partial_overrides/reports/weekly/) · [monthly](instances/partial_overrides/reports/monthly/) |
+| `partial_clean` · `partial_k2_2pct` · `partial_k2_5pct` | Active since Jun 9 | short-call-spread trio, daily-only (control + 2%/5% hedge) — [clean](instances/partial_clean/reports/weekly/) · [k2-2%](instances/partial_k2_2pct/reports/weekly/) · [k2-5%](instances/partial_k2_5pct/reports/weekly/) |
+| `legacy_v2.1` | Frozen on May 9 | original PT v2 baseline (includes the PM-001 window) — [weekly](instances/legacy_v2.1/reports/weekly/) · [monthly](instances/legacy_v2.1/reports/monthly/) |
 
 ### Performance snapshot — canonical instance, daily model
 
@@ -50,7 +51,7 @@ Across 16 days, 92 closed trades:
 
 _CEA (Capital Effectively Allocated) = peak simultaneous initial margin × 1.25 — the capital actually at risk (the metric previously labeled "AUM"; see [`DISCLOSURES.md`](DISCLOSURES.md))._
 
-The full cross-instance, cross-horizon metrics are published in [`reports/`](reports/) and refresh per closed cycle. Live event stream in [`events.jsonl`](events.jsonl). The canonical pricing-and-execution stack runs without experimental overrides; the two override instances are under live evaluation.
+Reports refresh per closed cycle, **per instance** (see the table above). Live event stream in [`events.jsonl`](events.jsonl). The canonical pricing-and-execution stack runs without experimental overrides; the override instances are under live evaluation. _(The root `reports/` folder is retired — it previously held only the frozen `legacy_v2.1` baseline, which now lives under [`instances/legacy_v2.1/reports/`](instances/legacy_v2.1/reports/).)_
 
 ---
 
@@ -143,13 +144,12 @@ polya-papertrading-log/
 ├── events.jsonl               ← SOURCE OF TRUTH — append-only event stream
 ├── events.jsonl.ots           ← OpenTimestamps proof (Bitcoin-anchored, weekly)
 ├── verify.py                  ← deterministic P&L re-computation script
-├── instances/                 ← per-instance event streams (multi-instance architecture)
+├── instances/                 ← per-instance event streams AND reports
+│   └── <id>/reports/           ← weekly (W01…) + monthly (M01…), cumulative-first
 ├── positions/
 │   └── open.json              ← live snapshot of currently open positions
 ├── sessions/                  ← human-readable daily summaries
-├── reports/
-│   ├── weekly/                ← weekly performance reports (W01, W02, ...)
-│   └── monthly/               ← monthly performance reports (M01, ...)
+├── reports/                   ← RETIRED (legacy baseline moved to instances/legacy_v2.1/reports/)
 ├── post-mortems/              ← operational incident records (PM-001, ...)
 └── api_archive/               ← raw market data archive (auditor reference)
 ```

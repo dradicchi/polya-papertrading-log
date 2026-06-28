@@ -268,5 +268,32 @@
     "exec_btc": 0.0285,
     "im_btc": 0.1,
     "exit_target_btc": 0.00285
+  },
+  {
+    "event_id": "61bdbd33cf91c1cf",
+    "horizon": "daily",
+    "instrument": "BTC-1JUL26-63000-C",
+    "ts_entry": "2026-06-28T00:00:08.564Z",
+    "exec_btc": 0.0017,
+    "im_btc": 0.1,
+    "exit_target_btc": 0.00017
+  },
+  {
+    "event_id": "4cffaa42a8092ede",
+    "horizon": "daily",
+    "instrument": "BTC-1JUL26-62500-C",
+    "ts_entry": "2026-06-28T00:00:08.572Z",
+    "exec_btc": 0.0027,
+    "im_btc": 0.10737,
+    "exit_target_btc": 0.00027
+  },
+  {
+    "event_id": "94027a2354700108",
+    "horizon": "daily",
+    "instrument": "BTC-1JUL26-62000-C",
+    "ts_entry": "2026-06-28T00:00:08.578Z",
+    "exec_btc": 0.0041,
+    "im_btc": 0.115711,
+    "exit_target_btc": 0.00041000000000000005
   }
 ]

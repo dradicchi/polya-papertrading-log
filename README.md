@@ -26,7 +26,7 @@ Polya Technologies is an **AI-assisted proprietary trading firm** — no externa
 
 ## Current state
 
-**42 days since go-live** · Apr 13 → May 24, 2026 · Capital pot: 20 BTC
+**76 days since go-live** · Apr 13 → Jun 28, 2026 · Capital pot: 20 BTC
 
 ### Architecture: parallel instances
 
@@ -40,14 +40,14 @@ The paper-trading system runs several parallel parameter configurations to isola
 | `partial_clean` · `partial_k2_2pct` · `partial_k2_5pct` | Active since Jun 9 | short-call-spread trio, daily-only (control + 2%/5% hedge) — [clean](instances/partial_clean/reports/weekly/) · [k2-2%](instances/partial_k2_2pct/reports/weekly/) · [k2-5%](instances/partial_k2_5pct/reports/weekly/) |
 | `legacy_v2.1` | Frozen on May 9 | original PT v2 baseline (includes the PM-001 window) — [weekly](instances/legacy_v2.1/reports/weekly/) · [monthly](instances/legacy_v2.1/reports/monthly/) |
 
-### Performance snapshot — canonical instance, daily model
+### Performance snapshot — canonical instance, daily horizon
 
-Across 16 days, 92 closed trades:
+Cumulative since go-live (as of weekly cycle W07 · 354 daily trades):
 
-- Annualized ROI on CEA: **+111.7%**
-- Daily Sharpe ratio: **+9.99**
+- Annualized ROI on CEA: **+100.6%**
+- Daily Sharpe ratio: **+9.59**
 - Win rate: **90%**
-- Max drawdown: **−0.3%** of CEA
+- Max drawdown: **−1.1%** of CEA
 
 _CEA (Capital Effectively Allocated) = peak simultaneous initial margin × 1.25 — the capital actually at risk (the metric previously labeled "AUM"; see [`DISCLOSURES.md`](DISCLOSURES.md))._
 

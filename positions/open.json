@@ -711,15 +711,6 @@
     "exit_target_btc": 0.00115
   },
   {
-    "event_id": "4bbfdb067b92e95c",
-    "horizon": "daily",
-    "instrument": "BTC-2JUL26-61000-C",
-    "ts_entry": "2026-06-29T00:00:07.549Z",
-    "exec_btc": 0.0085,
-    "im_btc": 0.124437,
-    "exit_target_btc": 0.0008500000000000001
-  },
-  {
     "event_id": "7b444807b6e675b6",
     "horizon": "daily",
     "instrument": "BTC-2JUL26-60000-C",
@@ -736,15 +727,6 @@
     "exec_btc": 0.0115,
     "im_btc": 0.132843,
     "exit_target_btc": 0.00115
-  },
-  {
-    "event_id": "fe6cfe5da82307fa",
-    "horizon": "daily",
-    "instrument": "BTC-2JUL26-61000-C",
-    "ts_entry": "2026-06-29T00:00:07.633Z",
-    "exec_btc": 0.0085,
-    "im_btc": 0.124437,
-    "exit_target_btc": 0.0008500000000000001
   },
   {
     "event_id": "0fc06408b1e7f8fd",
@@ -765,15 +747,6 @@
     "exit_target_btc": 0.00115
   },
   {
-    "event_id": "dff15c3c1fa9476f",
-    "horizon": "daily",
-    "instrument": "BTC-2JUL26-61000-C",
-    "ts_entry": "2026-06-29T00:00:07.702Z",
-    "exec_btc": 0.0085,
-    "im_btc": 0.124437,
-    "exit_target_btc": 0.0008500000000000001
-  },
-  {
     "event_id": "a0abf16e6565cbec",
     "horizon": "daily",
     "instrument": "BTC-2JUL26-60000-C",
@@ -792,15 +765,6 @@
     "exit_target_btc": 0.00115
   },
   {
-    "event_id": "5f16f85f9ed2e0c8",
-    "horizon": "daily",
-    "instrument": "BTC-2JUL26-61000-C",
-    "ts_entry": "2026-06-29T00:00:07.778Z",
-    "exec_btc": 0.0085,
-    "im_btc": 0.124437,
-    "exit_target_btc": 0.0008500000000000001
-  },
-  {
     "event_id": "6f30aaae299e469b",
     "horizon": "daily",
     "instrument": "BTC-2JUL26-60000-C",
@@ -817,15 +781,6 @@
     "exec_btc": 0.0115,
     "im_btc": 0.132843,
     "exit_target_btc": 0.00115
-  },
-  {
-    "event_id": "e7d081a240d2d527",
-    "horizon": "daily",
-    "instrument": "BTC-2JUL26-61000-C",
-    "ts_entry": "2026-06-29T00:00:07.858Z",
-    "exec_btc": 0.0085,
-    "im_btc": 0.124437,
-    "exit_target_btc": 0.0008500000000000001
   },
   {
     "event_id": "025223f1aee84969",

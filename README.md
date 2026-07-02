@@ -51,7 +51,13 @@ Cumulative since go-live (as of weekly cycle W07 · 354 daily trades):
 
 _CEA (Capital Effectively Allocated) = peak simultaneous initial margin × 1.25 — the capital actually at risk (the metric previously labeled "AUM"; see [`DISCLOSURES.md`](DISCLOSURES.md))._
 
-Reports refresh per closed cycle, **per instance** (see the table above). Live event stream in [`events.jsonl`](events.jsonl). The canonical pricing-and-execution stack runs without experimental overrides; the override instances are under live evaluation. _(The root `reports/` folder is retired — it previously held only the frozen `legacy_v2.1` baseline, which now lives under [`instances/legacy_v2.1/reports/`](instances/legacy_v2.1/reports/).)_
+Reports refresh per closed cycle, **per instance** (see the table above). The live event streams are the per-instance logs under [`instances/<id>/events.jsonl`](instances/) — `instances/canonical/events.jsonl` is the canonical public benchmark. The root [`events.jsonl`](events.jsonl) is the **frozen `legacy_v2.1` baseline** (last event 2026-06-01) and is no longer the active source of truth for current headline metrics. The canonical pricing-and-execution stack runs without experimental overrides; the override instances are under live evaluation. _(The root `reports/` folder is likewise retired — the frozen `legacy_v2.1` baseline now lives under [`instances/legacy_v2.1/reports/`](instances/legacy_v2.1/reports/).)_
+
+### Which file should I audit?
+
+- **Active source of truth** — the per-instance event streams: `instances/<id>/events.jsonl`. The headline performance snapshot above comes from **`instances/canonical/events.jsonl`**.
+- **Legacy baseline** — the root `events.jsonl` is the frozen `legacy_v2.1` stream (through 2026-06-01, includes the PM-001 window). Retained for continuity; not the active record.
+- **Everything else** (reports, `positions/open.json`, sessions) is a generated view of these streams.
 
 ---
 
@@ -141,11 +147,13 @@ polya-papertrading-log/
 ├── VERIFY.md                  ← step-by-step audit instructions
 ├── DISCLOSURES.md             ← methodological gaps, retroactive notes
 ├── LICENSE                    ← CC-BY-4.0 (data only; model is proprietary)
-├── events.jsonl               ← SOURCE OF TRUTH — append-only event stream
-├── events.jsonl.ots           ← OpenTimestamps proof (Bitcoin-anchored, weekly)
+├── events.jsonl               ← LEGACY source (frozen legacy_v2.1 baseline, through 2026-06-01)
 ├── verify.py                  ← deterministic P&L re-computation script
-├── instances/                 ← per-instance event streams AND reports
-│   └── <id>/reports/           ← weekly (W01…) + monthly (M01…), cumulative-first
+├── instances/                 ← ACTIVE SOURCES OF TRUTH — per-instance event streams AND reports
+│   └── <id>/
+│       ├── events.jsonl        ← append-only event stream (canonical = public benchmark)
+│       └── reports/            ← weekly (W01…) + monthly (M01…), cumulative-first
+├── timestamps/                ← OpenTimestamps proofs (Bitcoin-anchored) — see VERIFY.md
 ├── positions/
 │   └── open.json              ← live snapshot of currently open positions
 ├── sessions/                  ← human-readable daily summaries
@@ -154,10 +162,10 @@ polya-papertrading-log/
 └── api_archive/               ← raw market data archive (auditor reference)
 ```
 
-- `events.jsonl` is the canonical machine-readable source of truth. Every other file in the repository is a view of it. If any file disagrees with `events.jsonl`, `events.jsonl` is correct.
-- `positions/open.json` is **rewritten** with each event (it is a projection, not history). Its content is reproducible from replaying `events.jsonl`.
+- The `instances/<id>/events.jsonl` streams are the canonical machine-readable source of truth (the root `events.jsonl` is the frozen `legacy_v2.1` baseline). Every other file in the repository is a view of these streams. If any file disagrees, the instance event stream is correct.
+- `positions/open.json` is **rewritten** with each event (it is a projection, not history). Its content is reproducible from replaying the event streams.
 - `sessions/` and `reports/` are generated artifacts — convenience renderings, not authoritative.
-- `instances/` segregates the four parallel parameter configurations introduced on May 9, 2026.
+- `instances/` segregates the parallel parameter configurations: `canonical`, `full_overrides` and `partial_overrides` (introduced May 9, 2026), the `partial_clean` / `partial_k2_2pct` / `partial_k2_5pct` short-call-spread trio (introduced June 9, 2026), and the frozen `legacy_v2.1` baseline — seven streams in total.
 
 ---
 
@@ -184,7 +192,7 @@ Detected gaps during the run are documented in [`DISCLOSURES.md`](DISCLOSURES.md
 ## Disclaimers
 
 1. **No real trades.** This is a paper trading log. No capital is at risk; no orders are sent to Deribit; no positions exist. Every event is a simulation computed from public market data observed at the declared timestamp.
-2. **Execution fidelity is realistic-pessimistic.** Entries are simulated at the `best_bid` of the Deribit public book (worst plausible sale price), exits at the `best_ask` (worst plausible repurchase price). The full bid-ask spread is paid on each trade. Deribit taker fees are applied to every opening and closing leg. The resulting P&L is a conservative lower bound on what a real execution could achieve — in practice, an institutional execution would typically fill somewhere in the spread and pay maker fees on at least some legs.
+2. **Execution fidelity — conservative entries, mark-price exits with a pessimistic scenario in parallel.** Entries are simulated at the `best_bid` of the Deribit public book (the worst plausible sale price for a premium seller). Exits are recorded at `mark_price`: headline P&L assumes a limit fill at mid with no spread paid on the closing leg — a model-consistent convention that measures the model's convergence to fair value. Every cycle report **also publishes a pessimistic `best_ask` scenario** (immediate market buy-back, full spread paid) alongside the mark scenario; real execution sits between the two depending on execution quality. Deribit taker fees are applied to every leg in both scenarios. **Headline figures in this README and in the reports are the mark scenario unless labeled otherwise.**
 3. **No tax, no funding, no settlement risk.** The strategy is all-option; no perpetual hedge. Settlement in BTC-denominated inverse contracts. No USD conversion in the P&L. No tax computation. No counterparty or exchange risk modeled.
 4. **Model NOT disclosed.** The scoring model that decides entries is proprietary. This repository contains its outputs (which trades to open), not its internals. The audit is "did the declared trade execute consistently with the public book?", not "is the model's decision correct?".
 5. **Past performance ≠ future results.** Paper trading results are specific to the regime observed during the test period. Extrapolating to a different market regime is a research question, not a certainty. The four-instance architecture is designed to test parameter variations across regimes; it does not eliminate regime risk.

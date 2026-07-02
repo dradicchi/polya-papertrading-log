@@ -1279,3 +1279,28 @@ The trading cycle now timestamps each active instance stream into
 historical event was edited or removed. Bitcoin-anchored timestamp coverage of
 the live streams begins at the first cycle after this entry. This was found
 during an external maintainer review of the repository's audit surface.
+
+---
+
+## 2026-07-02 (session 101): Placeholder record at the head of the canonical stream
+
+### What it is, in plain language
+
+The first line of `instances/canonical/events.jsonl` is a placeholder record
+from the instance's initial seeding: `{"event_id":"e2","type":"entry",
+"instrument":"BTC-Y-C","instance_id":"canonical"}`. It carries no
+`schema_version`, no timestamp, and no economic fields, and it does not
+correspond to any real position.
+
+### Impact
+
+None on any recorded trade or figure. It is not counted as an entry, an exit,
+or an open position by the verifier, and it does not enter any P&L, IM, or
+capacity computation. It is isolated to the `canonical` stream.
+
+### Handling
+
+Consistent with this repository's append-only principle, the line is **not
+deleted**. `verify.py` skips any record lacking `schema_version` and reports it
+as a warning rather than an error, so the audit passes while the artifact
+remains visible in history.

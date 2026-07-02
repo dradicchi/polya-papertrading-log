@@ -54,23 +54,29 @@ If the two numbers match, every line was added exactly once and never edited. An
 
 ## Step 3 — Recompute P&L from raw events
 
+`verify.py` is schema-aware. Audit one stream, or all of them at once:
+
 ```bash
-python3 verify.py events.jsonl
+python3 verify.py instances/canonical/events.jsonl   # the canonical benchmark
+python3 verify.py --all-instances                    # every instance + legacy root
+python3 verify.py events.jsonl                        # legacy root stream
 ```
 
-The `verify.py` script (included in this repo) performs the following checks:
+For each stream, from the raw recorded primitives, it re-derives and checks:
 
-1. **Schema validation:** every line parses as valid JSON with the required fields for its event type.
-2. **Temporal ordering:** events are in strictly ascending `ts_utc` order.
-3. **Entry-exit pairing:** every `exit` event has a matching `entry` via `ref_entry_event_id`, and vice versa (no orphan entries without exits, except for currently open positions).
-4. **Fee recomputation:** `entry.fee_btc == max(0.0001, min(0.0003, 0.125 * entry.exec_btc))` for each entry.
-5. **L2 recomputation:** `entry.l2_btc == max(0, entry.mark_price - entry.exec_btc)` for each entry; analogous for exits.
-6. **IM recomputation:** `entry.im_btc == max(0.10, 1.15 - 1/entry.x)` for short CALL.
-7. **PnL recomputation:** for each (entry, exit) pair: `pnl_gross = entry.exec_btc - exit.exec_btc` and `pnl_net = pnl_gross - (entry.fee + entry.l2 + exit.fee + exit.l2)`. Compared against the declared `exit.pnl_gross_btc` and `exit.pnl_net_btc`. Tolerance: 1e-10 BTC (floating-point epsilon).
-8. **Capital constraint:** at no point in the timeline does the sum of `im_btc` of open positions exceed 9.6 BTC.
-9. **Event ID determinism:** `event_id == sha256(type + "|" + instrument + "|" + ts_utc + "|" + horizon)[:16]` for each event.
+1. **Schema validation:** every line parses as valid JSON with the required fields for its event type (`entry`, `exit`, `exit_target_placed`, `rejected_daily_cap`).
+2. **Event ID determinism:** `event_id == sha256(type + "|" + instrument + "|" + ts_utc + "|" + horizon [+ "|" + instance_id])[:16]`. The `instance_id` is appended for every instance except the legacy default (`legacy_v2.1`), which keeps the original v1 IDs.
+3. **No duplicate event IDs.**
+4. **Entry-exit pairing:** every `exit` references a known `entry` via `ref_entry_event_id`; unmatched entries are currently-open positions (reported, not an error).
+5. **Fee recomputation:** `fee_btc == max(0.0001, min(0.0003, 0.125 * exec_btc))` per leg (settlement-at-expiry exits carry a fee only if they settled with value).
+6. **L2 recomputation:** entries `max(0, mark_price - exec_btc)`; active exits `max(0, exec_btc - mark_price)`; settlement-at-expiry exits `0` (no order-book transaction).
+7. **IM recomputation:** `im_btc == max(0.10, 1.15 - 1/x)` for short CALL. Tolerance 1e-5 BTC (IM is derived from the stored, rounded `x` through `1/x`, which amplifies its ~6-dp storage precision).
+8. **PnL recomputation:** `pnl_gross = entry.exec_btc - exit.exec_btc`; `pnl_net = pnl_gross - (entry.fee + entry.l2 + exit.fee + exit.l2)`, against the declared values. Tolerance 1e-8 BTC.
+9. **Capital constraint:** peak simultaneous `im_btc` never exceeds the 20 BTC pot (resized from 9.6 on 2026-04-15 — see `DISCLOSURES.md`).
 
-Output: `OK — N events, M completed trades, 0 discrepancies` or a list of failed checks with line numbers.
+Output per stream: `OK — N events, M trades, K open, PnL ±X BTC, peak IM Y BTC` (or a list of failed checks with line numbers), plus `ALL OK` / `SOME STREAMS FAILED` for `--all-instances`.
+
+**Warnings, not failures.** Two conditions are reported as warnings and do **not** fail the audit: (a) sub-second `ts_utc` inversions among events emitted within the same cycle, and (b) the single pre-schema placeholder record at the head of `instances/canonical/events.jsonl` (see `DISCLOSURES.md`). Sequence integrity is proven independently by the append-only git history (Step 2) and the SSH-signed commits (Step 1); these warnings do not affect any recomputed figure.
 
 ---
 

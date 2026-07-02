@@ -76,17 +76,30 @@ Output: `OK — N events, M completed trades, 0 discrepancies` or a list of fail
 
 ## Step 4 — Verify blockchain timestamp (optional)
 
-If the `opentimestamps-client` is installed:
+Each event stream is timestamped into its own `timestamps/` directory: the
+active per-instance streams under `instances/<id>/timestamps/`, and the frozen
+legacy root stream under the root `timestamps/`. Each `.sha256` file records the
+hash of the stream at a point in time, and its sibling `.sha256.ots` is the
+OpenTimestamps proof. The `.sha256` file's internal label names which stream it
+anchors (e.g. `instances/canonical/events.jsonl`).
+
+If the `opentimestamps-client` is installed, verify the most recent proof for
+the stream you are auditing — for the canonical benchmark:
 
 ```bash
-ots verify events.jsonl.ots
+# most recent proof for the canonical instance stream
+latest=$(ls -1 instances/canonical/timestamps/*.sha256.ots | sort | tail -1)
+ots verify "$latest"
+# confirm it anchors the current stream hash
+shasum -a 256 instances/canonical/events.jsonl
+cat "${latest%.ots}"   # the recorded hash + stream label
 ```
 
 Expected output: `Success! Bitcoin block NNNNNN attests existence as of YYYY-MM-DD`.
 
-This proves that the `events.jsonl` file (with its specific SHA-256 hash) existed at or before the timestamp anchored in the Bitcoin blockchain. Combined with the append-only property from Step 2, this means no events could have been inserted retroactively before that anchor point.
+This proves that the instance's `events.jsonl` (with its specific SHA-256 hash) existed at or before the timestamp anchored in the Bitcoin blockchain. Combined with the append-only property from Step 2, this means no events could have been inserted retroactively before that anchor point.
 
-Note: OTS proofs are generated weekly. Events between two weekly anchors are covered by the SSH signatures (Step 1) but not yet by a blockchain timestamp. The next weekly anchor will cover them.
+Note: OTS proofs are generated per trading cycle for each instance that had activity. A fresh `.ots` starts as a *pending* proof and is upgraded to a Bitcoin-anchored proof within a few hours (run `ots upgrade <file>.ots`). Events recorded after the most recent anchor are covered by the SSH signatures (Step 1) but not yet by a blockchain timestamp; the next anchor covers them. Bitcoin-anchored coverage of the per-instance live streams begins 2026-07-02 (see [`DISCLOSURES.md`](DISCLOSURES.md)); earlier live-stream events are covered by the append-only git history and SSH signatures.
 
 ---
 

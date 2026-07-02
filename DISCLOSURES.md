@@ -1247,3 +1247,35 @@ effect immaterial; the deeper out-of-the-money configuration was immune; no
 stopping rule, no methodology change. PM-002 is the mirror-image case: the
 adverse move did not persist, which is precisely why it left no mark. Detail:
 **[`post-mortems/PM-002-2026-06-08.md`](post-mortems/PM-002-2026-06-08.md)**.
+
+---
+
+## 2026-07-02 (session 101): OpenTimestamps coverage of live instance streams
+
+### What was wrong, in plain language
+
+From the multi-instance migration (May 2026) until this fix, the OpenTimestamps
+layer timestamped only the root `events.jsonl` — the frozen `legacy_v2.1`
+baseline, whose last event is dated 2026-06-01. The per-instance live streams
+(`instances/<id>/events.jsonl`), which back all headline metrics since June,
+received **no Bitcoin-anchored timestamp**: roughly one month of live data. The
+scaffolding to timestamp per instance existed in the codebase but was never
+wired into the trading cycle, so every cycle re-anchored the same frozen hash.
+
+### Impact
+
+No effect on recorded trades or P&L. Throughout the gap, the append-only git
+history and the SSH-signed commits continued to prove sequence integrity and
+author integrity. The gap was confined to the **strongest time-integrity layer**
+(Bitcoin-anchored existence proof): live-stream events were not anchored to a
+Bitcoin block until the first timestamp after this fix. The existing timestamps
+of the root/legacy stream remain valid for the events they cover (through
+2026-06-01).
+
+### Fix
+
+The trading cycle now timestamps each active instance stream into
+`instances/<id>/timestamps/`, hashing that instance's own `events.jsonl`. No
+historical event was edited or removed. Bitcoin-anchored timestamp coverage of
+the live streams begins at the first cycle after this entry. This was found
+during an external maintainer review of the repository's audit surface.

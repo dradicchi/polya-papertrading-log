@@ -152,8 +152,9 @@ polya-papertrading-log/
 ├── instances/                 ← ACTIVE SOURCES OF TRUTH — per-instance event streams AND reports
 │   └── <id>/
 │       ├── events.jsonl        ← append-only event stream (canonical = public benchmark)
+│       ├── timestamps/         ← OpenTimestamps proofs (Bitcoin-anchored) for this stream
 │       └── reports/            ← weekly (W01…) + monthly (M01…), cumulative-first
-├── timestamps/                ← OpenTimestamps proofs (Bitcoin-anchored) — see VERIFY.md
+├── timestamps/                ← OpenTimestamps proofs for the frozen legacy root stream — see VERIFY.md
 ├── positions/
 │   └── open.json              ← live snapshot of currently open positions
 ├── sessions/                  ← human-readable daily summaries

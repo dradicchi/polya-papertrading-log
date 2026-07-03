@@ -50,6 +50,15 @@ wc -l < events.jsonl
 
 If the two numbers match, every line was added exactly once and never edited. Any editing would appear as both a `+` (addition) and a `-` (removal) in the diff for the same line.
 
+For a per-stream verdict, `tools/audit_append_only.py` sums the added and deleted line counts across every commit that touched a file:
+
+```bash
+python3 tools/audit_append_only.py instances/canonical/events.jsonl   # the benchmark
+python3 tools/audit_append_only.py --all                              # every stream (slow)
+```
+
+Zero deletions across the history means the stream is purely append-only. The `canonical` benchmark is append-only from genesis. The `partial_clean` / `partial_k2_2pct` / `partial_k2_5pct` trio shows a single deletion event — the disclosed session-90 synchronized reset (see the 2026-06-09 entry in [`DISCLOSURES.md`](DISCLOSURES.md)); the script prints the exact commit so it can be cross-checked. (Runtime scales with history; the large `canonical` stream takes ~1–2 minutes.)
+
 ---
 
 ## Step 3 — Recompute P&L from raw events

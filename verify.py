@@ -16,6 +16,8 @@ For each stream it recomputes, from the raw recorded primitives, and checks:
   1. Schema        — required fields present per event type
   2. Event IDs     — deterministic sha256 (includes instance_id for v2)
   3. No duplicates — every event_id is unique
+  3b. Sequence     — the `seq` field (where present) is strictly increasing,
+                     giving a provable order independent of ts_utc
   4. Pairing       — every exit references a known entry (open entries are OK)
   5. Fees (L1)     — Deribit underlying fee, per leg
   6. L2            — half-spread vs mark, per leg
@@ -128,6 +130,7 @@ def verify(events):
     inversions = 0
     schema_violations = 0
     prev_ts = None
+    last_seq = None
 
     for ev in events:
         line = ev.get('_line', '?')
@@ -168,6 +171,20 @@ def verify(events):
             inversions += 1
             warnings.append(f"L{line}: timestamp {ts} < previous {prev_ts}")
         prev_ts = ts
+
+        # ── Sequence ordering (authoritative where present) ───────────────
+        # `seq` is a per-stream monotonic counter added from 2026-07-02 (see
+        # DISCLOSURES.md). It gives a provable order that is robust to the
+        # sub-second ts_utc inversions among same-cycle events. Older events
+        # carry no seq and are skipped here.
+        seq = ev.get('seq')
+        if seq is not None:
+            if last_seq is not None and seq <= last_seq:
+                errors.append(
+                    f"L{line}: seq {seq} not strictly increasing "
+                    f"(previous {last_seq})"
+                )
+            last_seq = seq
 
         # ── Event ID determinism (all types) ──────────────────────────────
         expected_id = compute_event_id(

@@ -1304,3 +1304,28 @@ Consistent with this repository's append-only principle, the line is **not
 deleted**. `verify.py` skips any record lacking `schema_version` and reports it
 as a warning rather than an error, so the audit passes while the artifact
 remains visible in history.
+
+---
+
+## 2026-07-02 (session 101): Provable event ordering (`seq`) and emission-time validation
+
+### What changed
+
+Two forward-only hardening measures were added to the event emitter:
+
+1. **`seq` field.** Every event written from this date carries a per-stream,
+   strictly increasing integer `seq`. Within a single trading cycle, several
+   events can share (or sub-second-invert) their `ts_utc`; `seq` gives an
+   order that is provable from the file alone, independent of the wall clock.
+   `verify.py` checks that `seq` is strictly increasing where present.
+2. **Emission-time validation.** The emitter now rejects any event missing the
+   universal fields (`event_id`, `type`, `ts_utc`, `schema_version`) before it
+   is written — a regression guard so the placeholder-class defect above cannot
+   recur from new code.
+
+### Impact
+
+None on any recorded trade or figure. `seq` is additive: pre-2026-07-02 events
+carry no `seq` and remain ordered by the append-only git history (and by
+`ts_utc`, with the small same-cycle inversions that `verify.py` reports as
+warnings). No historical event was edited.

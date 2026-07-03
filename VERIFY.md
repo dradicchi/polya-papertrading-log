@@ -67,6 +67,7 @@ For each stream, from the raw recorded primitives, it re-derives and checks:
 1. **Schema validation:** every line parses as valid JSON with the required fields for its event type (`entry`, `exit`, `exit_target_placed`, `rejected_daily_cap`).
 2. **Event ID determinism:** `event_id == sha256(type + "|" + instrument + "|" + ts_utc + "|" + horizon [+ "|" + instance_id])[:16]`. The `instance_id` is appended for every instance except the legacy default (`legacy_v2.1`), which keeps the original v1 IDs.
 3. **No duplicate event IDs.**
+3b. **Sequence ordering:** the `seq` field (a per-stream strictly-increasing integer, added 2026-07-02 — see `DISCLOSURES.md`) is checked to be strictly increasing where present. It gives an order provable from the file alone, robust to the sub-second `ts_utc` inversions among same-cycle events. Older events carry no `seq` and rely on the append-only git history.
 4. **Entry-exit pairing:** every `exit` references a known `entry` via `ref_entry_event_id`; unmatched entries are currently-open positions (reported, not an error).
 5. **Fee recomputation:** `fee_btc == max(0.0001, min(0.0003, 0.125 * exec_btc))` per leg (settlement-at-expiry exits carry a fee only if they settled with value).
 6. **L2 recomputation:** entries `max(0, mark_price - exec_btc)`; active exits `max(0, exec_btc - mark_price)`; settlement-at-expiry exits `0` (no order-book transaction).

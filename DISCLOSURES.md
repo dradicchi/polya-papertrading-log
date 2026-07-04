@@ -1329,3 +1329,24 @@ None on any recorded trade or figure. `seq` is additive: pre-2026-07-02 events
 carry no `seq` and remain ordered by the append-only git history (and by
 `ts_utc`, with the small same-cycle inversions that `verify.py` reports as
 warnings). No historical event was edited.
+
+---
+
+## 2026-07-04 (session 101): Fourth adverse event — the qualifying test of the tail hedge
+
+A sustained +7% BTC rally over four to five days (a grind, not a spike) pushed
+the near-the-money daily short-CALL book into a path drawdown that crossed the
+daily stopping threshold on several instances for the first time. It was the
+**first live event of the magnitude the tail hedge was designed for**, so the
+three-arm hedge experiment (naked control plus two protective spread variants)
+delivered its verdict under the qualifying scenario: the **naked short leg was
+resilient** (ended near flat, the drawdown mean-reverted) while the **hedge was
+pure cost even here** — the premium paid on every trade dominated its payouts,
+and the naked arm dominated both hedged arms. Across four adverse events, all
+have been multi-day grinds or rebounds; the fast flash the hedge targets has not
+occurred once. **No methodology change**; the tail hedge is not adopted as a
+return-driven product. The daily stopping threshold was crossed but trading was
+**not** halted — a documented decision, since pausing at the trough would have
+locked in losses immediately before the recovery that followed in all four
+events. Full write-up:
+**[`post-mortems/PM-004-2026-07-04.md`](post-mortems/PM-004-2026-07-04.md)**.

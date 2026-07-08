@@ -342,82 +342,10 @@
     "exit_target_btc": 0.0011
   },
   {
-    "event_id": "d50aa42e3f2421db",
-    "horizon": "daily",
-    "instrument": "BTC-8JUL26-63500-C",
-    "ts_entry": "2026-07-04T20:00:08.287Z",
-    "exec_btc": 0.011,
-    "im_btc": 0.145958,
-    "exit_target_btc": 0.0011
-  },
-  {
-    "event_id": "f7f68467f2b7c459",
-    "horizon": "daily",
-    "instrument": "BTC-8JUL26-63500-C",
-    "ts_entry": "2026-07-04T20:00:08.381Z",
-    "exec_btc": 0.011,
-    "im_btc": 0.145958,
-    "exit_target_btc": 0.0011
-  },
-  {
-    "event_id": "4b5e930572dce21a",
-    "horizon": "daily",
-    "instrument": "BTC-8JUL26-63500-C",
-    "ts_entry": "2026-07-04T20:00:08.461Z",
-    "exec_btc": 0.011,
-    "im_btc": 0.145958,
-    "exit_target_btc": 0.0011
-  },
-  {
-    "event_id": "09df35df9d728aa4",
-    "horizon": "daily",
-    "instrument": "BTC-8JUL26-63500-C",
-    "ts_entry": "2026-07-04T20:00:08.574Z",
-    "exec_btc": 0.011,
-    "im_btc": 0.145958,
-    "exit_target_btc": 0.0011
-  },
-  {
     "event_id": "8dff7d141b070f5e",
     "horizon": "daily",
     "instrument": "BTC-8JUL26-63000-C",
     "ts_entry": "2026-07-05T00:08:07.311Z",
-    "exec_btc": 0.0135,
-    "im_btc": 0.149792,
-    "exit_target_btc": 0.00135
-  },
-  {
-    "event_id": "aa3f59bb2c5c6fd6",
-    "horizon": "daily",
-    "instrument": "BTC-8JUL26-63000-C",
-    "ts_entry": "2026-07-05T00:08:07.420Z",
-    "exec_btc": 0.0135,
-    "im_btc": 0.149792,
-    "exit_target_btc": 0.00135
-  },
-  {
-    "event_id": "79fcc81a4f24fcbf",
-    "horizon": "daily",
-    "instrument": "BTC-8JUL26-63000-C",
-    "ts_entry": "2026-07-05T00:08:07.499Z",
-    "exec_btc": 0.0135,
-    "im_btc": 0.149792,
-    "exit_target_btc": 0.00135
-  },
-  {
-    "event_id": "119a1a34935be6ce",
-    "horizon": "daily",
-    "instrument": "BTC-8JUL26-63000-C",
-    "ts_entry": "2026-07-05T00:08:07.571Z",
-    "exec_btc": 0.0135,
-    "im_btc": 0.149792,
-    "exit_target_btc": 0.00135
-  },
-  {
-    "event_id": "33c55b354f9ef520",
-    "horizon": "daily",
-    "instrument": "BTC-8JUL26-63000-C",
-    "ts_entry": "2026-07-05T00:08:07.649Z",
     "exec_btc": 0.0135,
     "im_btc": 0.149792,
     "exit_target_btc": 0.00135
@@ -522,15 +450,6 @@
     "exit_target_btc": 0.00027
   },
   {
-    "event_id": "c69d474dfdd88961",
-    "horizon": "daily",
-    "instrument": "BTC-8JUL26-63500-C",
-    "ts_entry": "2026-07-06T02:08:06.854Z",
-    "exec_btc": 0.01,
-    "im_btc": 0.148301,
-    "exit_target_btc": 0.001
-  },
-  {
     "event_id": "156a51d17820ae73",
     "horizon": "daily",
     "instrument": "BTC-9JUL26-63500-C",
@@ -621,55 +540,10 @@
     "exit_target_btc": 0.00055
   },
   {
-    "event_id": "c5b7755e3196d4bd",
-    "horizon": "daily",
-    "instrument": "BTC-8JUL26-63000-C",
-    "ts_entry": "2026-07-06T09:39:05.912Z",
-    "exec_btc": 0.0075,
-    "im_btc": 0.143314,
-    "exit_target_btc": 0.00075
-  },
-  {
     "event_id": "299d9f47cb12c2ff",
     "horizon": "daily",
     "instrument": "BTC-8JUL26-62500-C",
     "ts_entry": "2026-07-06T12:00:06.800Z",
-    "exec_btc": 0.011,
-    "im_btc": 0.148592,
-    "exit_target_btc": 0.0011
-  },
-  {
-    "event_id": "fe17ae792e5184a3",
-    "horizon": "daily",
-    "instrument": "BTC-8JUL26-62500-C",
-    "ts_entry": "2026-07-06T12:00:06.871Z",
-    "exec_btc": 0.011,
-    "im_btc": 0.148592,
-    "exit_target_btc": 0.0011
-  },
-  {
-    "event_id": "d2c1c531691c10d3",
-    "horizon": "daily",
-    "instrument": "BTC-8JUL26-62500-C",
-    "ts_entry": "2026-07-06T12:00:06.933Z",
-    "exec_btc": 0.011,
-    "im_btc": 0.148592,
-    "exit_target_btc": 0.0011
-  },
-  {
-    "event_id": "9db370c06d2d445d",
-    "horizon": "daily",
-    "instrument": "BTC-8JUL26-62500-C",
-    "ts_entry": "2026-07-06T12:00:06.993Z",
-    "exec_btc": 0.011,
-    "im_btc": 0.148592,
-    "exit_target_btc": 0.0011
-  },
-  {
-    "event_id": "49e834464eca6be4",
-    "horizon": "daily",
-    "instrument": "BTC-8JUL26-62500-C",
-    "ts_entry": "2026-07-06T12:00:07.063Z",
     "exec_btc": 0.011,
     "im_btc": 0.148592,
     "exit_target_btc": 0.0011

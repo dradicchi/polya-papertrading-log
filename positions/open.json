@@ -657,15 +657,6 @@
     "exit_target_btc": 0.00135
   },
   {
-    "event_id": "b717e8655ca6a771",
-    "horizon": "daily",
-    "instrument": "BTC-9JUL26-62500-C",
-    "ts_entry": "2026-07-08T06:22:06.943Z",
-    "exec_btc": 0.0085,
-    "im_btc": 0.149679,
-    "exit_target_btc": 0.0008500000000000001
-  },
-  {
     "event_id": "aba7aa325a70cab1",
     "horizon": "daily",
     "instrument": "BTC-11JUL26-62500-C",
@@ -673,15 +664,6 @@
     "exec_btc": 0.0135,
     "im_btc": 0.149679,
     "exit_target_btc": 0.00135
-  },
-  {
-    "event_id": "0b9ba4903669b9e7",
-    "horizon": "daily",
-    "instrument": "BTC-9JUL26-62500-C",
-    "ts_entry": "2026-07-08T06:22:06.999Z",
-    "exec_btc": 0.0085,
-    "im_btc": 0.149679,
-    "exit_target_btc": 0.0008500000000000001
   },
   {
     "event_id": "889e88570552efe5",
@@ -693,15 +675,6 @@
     "exit_target_btc": 0.00135
   },
   {
-    "event_id": "2425beb9dd283619",
-    "horizon": "daily",
-    "instrument": "BTC-9JUL26-62500-C",
-    "ts_entry": "2026-07-08T06:22:07.058Z",
-    "exec_btc": 0.0085,
-    "im_btc": 0.149679,
-    "exit_target_btc": 0.0008500000000000001
-  },
-  {
     "event_id": "92c25e324681bfb3",
     "horizon": "daily",
     "instrument": "BTC-11JUL26-62500-C",
@@ -711,15 +684,6 @@
     "exit_target_btc": 0.00135
   },
   {
-    "event_id": "6a38d4fa397fef9f",
-    "horizon": "daily",
-    "instrument": "BTC-9JUL26-62500-C",
-    "ts_entry": "2026-07-08T06:22:07.121Z",
-    "exec_btc": 0.0085,
-    "im_btc": 0.149679,
-    "exit_target_btc": 0.0008500000000000001
-  },
-  {
     "event_id": "11558c75a0dcfa2c",
     "horizon": "daily",
     "instrument": "BTC-11JUL26-63500-C",
@@ -727,15 +691,6 @@
     "exec_btc": 0.0065,
     "im_btc": 0.134557,
     "exit_target_btc": 0.00065
-  },
-  {
-    "event_id": "a0f5e3851f3e289c",
-    "horizon": "daily",
-    "instrument": "BTC-9JUL26-62500-C",
-    "ts_entry": "2026-07-08T08:24:05.894Z",
-    "exec_btc": 0.0055,
-    "im_btc": 0.14432,
-    "exit_target_btc": 0.00055
   },
   {
     "event_id": "26824198522c3002",

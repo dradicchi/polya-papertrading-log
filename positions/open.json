@@ -450,15 +450,6 @@
     "exit_target_btc": 0.0008500000000000001
   },
   {
-    "event_id": "f3dae86ea91c1eb6",
-    "horizon": "daily",
-    "instrument": "BTC-11JUL26-65000-C",
-    "ts_entry": "2026-07-07T20:00:07.473Z",
-    "exec_btc": 0.0055,
-    "im_btc": 0.130986,
-    "exit_target_btc": 0.00055
-  },
-  {
     "event_id": "e473dac4e090685e",
     "horizon": "daily",
     "instrument": "BTC-11JUL26-64000-C",
@@ -475,15 +466,6 @@
     "exec_btc": 0.0085,
     "im_btc": 0.138825,
     "exit_target_btc": 0.0008500000000000001
-  },
-  {
-    "event_id": "657c0c1d4950063f",
-    "horizon": "daily",
-    "instrument": "BTC-11JUL26-65000-C",
-    "ts_entry": "2026-07-07T20:00:07.556Z",
-    "exec_btc": 0.0055,
-    "im_btc": 0.130986,
-    "exit_target_btc": 0.00055
   },
   {
     "event_id": "fb0abe0abb85ecfa",
@@ -504,15 +486,6 @@
     "exit_target_btc": 0.0008500000000000001
   },
   {
-    "event_id": "e63857bf126a6986",
-    "horizon": "daily",
-    "instrument": "BTC-11JUL26-65000-C",
-    "ts_entry": "2026-07-07T20:00:07.629Z",
-    "exec_btc": 0.0055,
-    "im_btc": 0.130986,
-    "exit_target_btc": 0.00055
-  },
-  {
     "event_id": "add416adae84e86f",
     "horizon": "daily",
     "instrument": "BTC-11JUL26-64000-C",
@@ -531,15 +504,6 @@
     "exit_target_btc": 0.0008500000000000001
   },
   {
-    "event_id": "2a578883aa266afb",
-    "horizon": "daily",
-    "instrument": "BTC-11JUL26-65000-C",
-    "ts_entry": "2026-07-07T20:00:07.711Z",
-    "exec_btc": 0.0055,
-    "im_btc": 0.130986,
-    "exit_target_btc": 0.00055
-  },
-  {
     "event_id": "d48bee1b0cc8dbaa",
     "horizon": "daily",
     "instrument": "BTC-11JUL26-64000-C",
@@ -556,15 +520,6 @@
     "exec_btc": 0.0085,
     "im_btc": 0.138825,
     "exit_target_btc": 0.0008500000000000001
-  },
-  {
-    "event_id": "5b865f25c009f510",
-    "horizon": "daily",
-    "instrument": "BTC-11JUL26-65000-C",
-    "ts_entry": "2026-07-07T20:00:07.802Z",
-    "exec_btc": 0.0055,
-    "im_btc": 0.130986,
-    "exit_target_btc": 0.00055
   },
   {
     "event_id": "8d7632dd5044be5d",

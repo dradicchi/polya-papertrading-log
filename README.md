@@ -38,6 +38,7 @@ The paper-trading system runs several parallel parameter configurations to isola
 | `full_overrides` | Active since May 9 | experimental config A — [weekly](instances/full_overrides/reports/weekly/) · [monthly](instances/full_overrides/reports/monthly/) |
 | `partial_overrides` | Active since May 9 | experimental config B — [weekly](instances/partial_overrides/reports/weekly/) · [monthly](instances/partial_overrides/reports/monthly/) |
 | `partial_clean` · `partial_k2_2pct` · `partial_k2_5pct` | Active since Jun 9 | short-call-spread trio, daily-only (control + 2%/5% hedge) — [clean](instances/partial_clean/reports/weekly/) · [k2-2%](instances/partial_k2_2pct/reports/weekly/) · [k2-5%](instances/partial_k2_5pct/reports/weekly/) |
+| `put_full_overrides` | Active since Jul 13 | first short-**put** book, daily-only (near-ATM mechanical selection) — [weekly](instances/put_full_overrides/reports/weekly/) · [monthly](instances/put_full_overrides/reports/monthly/) |
 | `legacy_v2.1` | Frozen on May 9 | original PT v2 baseline (includes the PM-001 window) — [weekly](instances/legacy_v2.1/reports/weekly/) · [monthly](instances/legacy_v2.1/reports/monthly/) |
 
 ### Performance snapshot — canonical instance, daily horizon
@@ -166,7 +167,7 @@ polya-papertrading-log/
 - The `instances/<id>/events.jsonl` streams are the canonical machine-readable source of truth (the root `events.jsonl` is the frozen `legacy_v2.1` baseline). Every other file in the repository is a view of these streams. If any file disagrees, the instance event stream is correct.
 - `positions/open.json` is **rewritten** with each event (it is a projection, not history). Its content is reproducible from replaying the event streams.
 - `sessions/` and `reports/` are generated artifacts — convenience renderings, not authoritative.
-- `instances/` segregates the parallel parameter configurations: `canonical`, `full_overrides` and `partial_overrides` (introduced May 9, 2026), the `partial_clean` / `partial_k2_2pct` / `partial_k2_5pct` short-call-spread trio (introduced June 9, 2026), and the frozen `legacy_v2.1` baseline — seven streams in total.
+- `instances/` segregates the parallel parameter configurations: `canonical`, `full_overrides` and `partial_overrides` (introduced May 9, 2026), the `partial_clean` / `partial_k2_2pct` / `partial_k2_5pct` short-call-spread trio (introduced June 9, 2026), `put_full_overrides` — the first short-**put** book, daily-only, near-ATM mechanical selection (introduced July 13, 2026) — and the frozen `legacy_v2.1` baseline — eight streams in total. Combined call+put figures, when shown, are analytical overlays of independently-run instances, not a single merged book (disclaimer #3 still holds: all-option, no perpetual hedge).
 
 ---
 

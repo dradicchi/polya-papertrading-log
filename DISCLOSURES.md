@@ -1350,3 +1350,33 @@ return-driven product. The daily stopping threshold was crossed but trading was
 locked in losses immediately before the recovery that followed in all four
 events. Full write-up:
 **[`post-mortems/PM-004-2026-07-04.md`](post-mortems/PM-004-2026-07-04.md)**.
+
+---
+
+## 2026-07-13 (session 104): First short-PUT instance launched
+
+A new paper-trading instance, `put_full_overrides`, goes live: a **pure
+short-PUT book, daily horizon only** — the first put-side stream in this log.
+It mirrors the *logic*, not the literal rule, of the `full_overrides` call
+configuration. On the call side that config ranks near-the-money (higher
+premium and time decay). The put wing's equivalent predictor was measured
+directly on the daily short-put backtest: **near-the-money moneyness predicts
+realized P&L** (rank correlation ≈ −0.36 on the recent window and ≈ −0.47 on
+the out-of-sample bear holdout, robust across regimes), while the model's
+fair-value deviation signal is **uninformative for puts** (≈ 0 out of sample).
+Accordingly the put selection is **mechanical**: near-the-money out-of-the-money
+puts within the model's validated moneyness/tenor range, above the break-even
+premium floor, with no model gate. The gated, model-scored put arm and the
+weekly/monthly put horizons are deferred to a later phase.
+
+Execution and accounting follow the same conventions as the call instances
+(entries at `best_bid`, mark-price exits with a pessimistic `best_ask` scenario
+published in parallel, Deribit taker fees on every leg). Initial margin uses the
+inverse-put formula `max(0.10, 1/x − 0.85)`, independently checkable via
+`verify.py` (the verifier now selects the formula by `option_type`). The
+short-put tail is structurally larger than the short-call tail (holdout MDD/CEA
+≈ −25% vs ≈ −3%), so the stopping-rule display threshold is scaled to the put's
+own holdout drawdown. Combined call+put figures, when shown, are **analytical
+overlays of two independently-run instances**, not a single merged book.
+Disclaimer #3 still holds: all-option, no perpetual hedge. **No methodology
+change to existing instances.**

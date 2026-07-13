@@ -22,6 +22,7 @@ This document specifies the exact fields of every event record in `events.jsonl`
 | `horizon` | string | `"monthly"` \| `"weekly"` \| `"daily"` |
 | `instrument` | string | Deribit instrument name, e.g. `BTC-17APR26-94000-C`. |
 | `side` | string | `"short"` in v1. The schema accepts `"long"` in the future. |
+| `option_type` | string | `"C"` (call) or `"P"` (put). Absent on legacy events = `"C"`. Added Fase 1 (2026-07-13) for the short-put instance. |
 | `api_response_hash` | string | `sha256` of the raw Deribit API JSON response used to generate this event. Allows an auditor to request the original response if Polya preserves it (optional). |
 
 ## 2. Event types
@@ -57,7 +58,7 @@ This document specifies the exact fields of every event record in `events.jsonl`
 | `exec_btc` | number | Execution price used to simulate the fill. Equals `best_bid` (short sells at bid). |
 | `fee_btc` | number | L1 cost: Deribit taker fee for the entry leg, in BTC. Computed via `option_fee_btc(exec_btc)`. |
 | `l2_btc` | number | L2 cost: half-spread paid at entry, in BTC. Equals `max(0, mark_price - exec_btc)`. |
-| `im_btc` | number | Initial margin committed in BTC per contract. Computed via `compute_im_btc(x, 'call') = max(0.10, 1.15 - 1/x)` for short CALL. |
+| `im_btc` | number | Initial margin committed in BTC per contract, selected by `option_type`. Short CALL (x<1): `max(0.10, 1.15 - 1/x)`. Short PUT (x>1): `max(0.10, 1/x - 0.85)`. |
 
 ### 3.2. `exit_target_placed`
 
@@ -139,7 +140,8 @@ For any `(entry, exit)` pair sharing the same `ref_entry_event_id`:
 ```
 exit.pnl_gross_btc == entry.exec_btc - exit.exec_btc
 exit.pnl_net_btc   == exit.pnl_gross_btc - (entry.fee_btc + entry.l2_btc + exit.fee_btc + exit.l2_btc)
-entry.im_btc        == max(0.10, 1.15 - 1/entry.x)   for side='short' and call options
+entry.im_btc        == max(0.10, 1.15 - 1/entry.x)   for option_type='C' (short call, x<1)
+entry.im_btc        == max(0.10, 1/entry.x - 0.85)   for option_type='P' (short put,  x>1)
 ```
 
 For any single event of type `entry`:

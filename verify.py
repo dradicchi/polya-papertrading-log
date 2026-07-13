@@ -207,8 +207,9 @@ def verify(events):
             _check(errors, line, 'l2_btc', ev['l2_btc'],
                    max(0.0, mark - exec_btc), TOL)
             if x > 0:
+                _side = 'put' if ev.get('option_type') == 'P' else 'call'
                 _check(errors, line, 'im_btc', ev['im_btc'],
-                       compute_im_btc(x, 'call'), TOL_IM)
+                       compute_im_btc(x, _side), TOL_IM)
 
             open_positions[eid] = ev
             running_im += ev['im_btc']

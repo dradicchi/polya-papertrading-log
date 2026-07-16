@@ -396,15 +396,6 @@
     "exit_target_btc": 0.0007000000000000001
   },
   {
-    "event_id": "40e74f7c935ebea0",
-    "horizon": "daily",
-    "instrument": "BTC-18JUL26-66000-C",
-    "ts_entry": "2026-07-14T20:00:06.703Z",
-    "exec_btc": 0.005,
-    "im_btc": 0.127495,
-    "exit_target_btc": 0.0005
-  },
-  {
     "event_id": "cb97bf09c8f8a364",
     "horizon": "daily",
     "instrument": "BTC-18JUL26-65000-C",
@@ -421,15 +412,6 @@
     "exec_btc": 0.007,
     "im_btc": 0.135241,
     "exit_target_btc": 0.0007000000000000001
-  },
-  {
-    "event_id": "1eed78f47b597c2d",
-    "horizon": "daily",
-    "instrument": "BTC-18JUL26-66000-C",
-    "ts_entry": "2026-07-14T20:00:06.777Z",
-    "exec_btc": 0.005,
-    "im_btc": 0.127495,
-    "exit_target_btc": 0.0005
   },
   {
     "event_id": "29644d245c7a05b8",
@@ -450,15 +432,6 @@
     "exit_target_btc": 0.0007000000000000001
   },
   {
-    "event_id": "741af4b5f4ebd742",
-    "horizon": "daily",
-    "instrument": "BTC-18JUL26-66000-C",
-    "ts_entry": "2026-07-14T20:00:06.852Z",
-    "exec_btc": 0.005,
-    "im_btc": 0.127495,
-    "exit_target_btc": 0.0005
-  },
-  {
     "event_id": "fdafd37b16ac7a49",
     "horizon": "daily",
     "instrument": "BTC-18JUL26-65000-C",
@@ -477,15 +450,6 @@
     "exit_target_btc": 0.0007000000000000001
   },
   {
-    "event_id": "a2f666927cad793f",
-    "horizon": "daily",
-    "instrument": "BTC-18JUL26-66000-C",
-    "ts_entry": "2026-07-14T20:00:06.924Z",
-    "exec_btc": 0.005,
-    "im_btc": 0.127495,
-    "exit_target_btc": 0.0005
-  },
-  {
     "event_id": "81faa048008b95eb",
     "horizon": "daily",
     "instrument": "BTC-18JUL26-65000-C",
@@ -502,15 +466,6 @@
     "exec_btc": 0.007,
     "im_btc": 0.135241,
     "exit_target_btc": 0.0007000000000000001
-  },
-  {
-    "event_id": "462ef9daae7242a2",
-    "horizon": "daily",
-    "instrument": "BTC-18JUL26-66000-C",
-    "ts_entry": "2026-07-14T20:00:06.997Z",
-    "exec_btc": 0.005,
-    "im_btc": 0.127495,
-    "exit_target_btc": 0.0005
   },
   {
     "event_id": "8e35d8b407db1db1",

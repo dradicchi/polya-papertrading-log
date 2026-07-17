@@ -387,15 +387,6 @@
     "exit_target_btc": 0.001
   },
   {
-    "event_id": "db3f9cb7059f54b9",
-    "horizon": "daily",
-    "instrument": "BTC-18JUL26-65500-C",
-    "ts_entry": "2026-07-14T20:00:06.698Z",
-    "exec_btc": 0.007,
-    "im_btc": 0.135241,
-    "exit_target_btc": 0.0007000000000000001
-  },
-  {
     "event_id": "cb97bf09c8f8a364",
     "horizon": "daily",
     "instrument": "BTC-18JUL26-65000-C",
@@ -403,15 +394,6 @@
     "exec_btc": 0.01,
     "im_btc": 0.142987,
     "exit_target_btc": 0.001
-  },
-  {
-    "event_id": "a57be578cedd5799",
-    "horizon": "daily",
-    "instrument": "BTC-18JUL26-65500-C",
-    "ts_entry": "2026-07-14T20:00:06.773Z",
-    "exec_btc": 0.007,
-    "im_btc": 0.135241,
-    "exit_target_btc": 0.0007000000000000001
   },
   {
     "event_id": "29644d245c7a05b8",
@@ -423,15 +405,6 @@
     "exit_target_btc": 0.001
   },
   {
-    "event_id": "00475a22c45c07f9",
-    "horizon": "daily",
-    "instrument": "BTC-18JUL26-65500-C",
-    "ts_entry": "2026-07-14T20:00:06.849Z",
-    "exec_btc": 0.007,
-    "im_btc": 0.135241,
-    "exit_target_btc": 0.0007000000000000001
-  },
-  {
     "event_id": "fdafd37b16ac7a49",
     "horizon": "daily",
     "instrument": "BTC-18JUL26-65000-C",
@@ -441,15 +414,6 @@
     "exit_target_btc": 0.001
   },
   {
-    "event_id": "d3cfb0002edf47e8",
-    "horizon": "daily",
-    "instrument": "BTC-18JUL26-65500-C",
-    "ts_entry": "2026-07-14T20:00:06.915Z",
-    "exec_btc": 0.007,
-    "im_btc": 0.135241,
-    "exit_target_btc": 0.0007000000000000001
-  },
-  {
     "event_id": "81faa048008b95eb",
     "horizon": "daily",
     "instrument": "BTC-18JUL26-65000-C",
@@ -457,15 +421,6 @@
     "exec_btc": 0.01,
     "im_btc": 0.142987,
     "exit_target_btc": 0.001
-  },
-  {
-    "event_id": "9019824441662170",
-    "horizon": "daily",
-    "instrument": "BTC-18JUL26-65500-C",
-    "ts_entry": "2026-07-14T20:00:06.989Z",
-    "exec_btc": 0.007,
-    "im_btc": 0.135241,
-    "exit_target_btc": 0.0007000000000000001
   },
   {
     "event_id": "8e35d8b407db1db1",

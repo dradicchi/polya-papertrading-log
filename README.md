@@ -30,16 +30,17 @@ Polya Technologies is an **AI-assisted proprietary trading firm** — no externa
 
 ### Architecture: parallel instances
 
-The paper-trading system runs several parallel parameter configurations to isolate the operational effect of strategy parameters and preserve experimental optionality without losing the historical baseline. **Each instance publishes its own reports** under `instances/<id>/reports/` (`weekly/` and `monthly/`); each report leads with the **cumulative-since-go-live** metrics, then the **cycle window**:
+The paper-trading system publishes three parallel instances: the **combined short-volatility book** (a short-CALL leg and a short-PUT leg, run as independent instances and combined analytically) plus a no-override **reference benchmark**. **Each instance publishes its own reports** under `instances/<id>/reports/` (`weekly/` and `monthly/`); each report leads with the **cumulative-since-go-live** metrics, then the **cycle window**:
 
 | Instance | Status | Reports |
 |---|---|---|
-| `canonical` | Active since May 9 | reference instance, no overrides — [weekly](instances/canonical/reports/weekly/) · [monthly](instances/canonical/reports/monthly/) |
-| `full_overrides` | Active since May 9 | experimental config A — [weekly](instances/full_overrides/reports/weekly/) · [monthly](instances/full_overrides/reports/monthly/) |
-| `partial_overrides` | Active since May 9 | experimental config B — [weekly](instances/partial_overrides/reports/weekly/) · [monthly](instances/partial_overrides/reports/monthly/) |
-| `partial_clean` · `partial_k2_2pct` · `partial_k2_5pct` | Active since Jun 9 | short-call-spread trio, daily-only (control + 2%/5% hedge) — [clean](instances/partial_clean/reports/weekly/) · [k2-2%](instances/partial_k2_2pct/reports/weekly/) · [k2-5%](instances/partial_k2_5pct/reports/weekly/) |
-| `put_full_overrides` | Active since Jul 13 | first short-**put** book, daily-only (near-ATM mechanical selection) — [weekly](instances/put_full_overrides/reports/weekly/) · [monthly](instances/put_full_overrides/reports/monthly/) |
-| `legacy_v2.1` | Frozen on May 9 | original PT v2 baseline (includes the PM-001 window) — [weekly](instances/legacy_v2.1/reports/weekly/) · [monthly](instances/legacy_v2.1/reports/monthly/) |
+| `canonical` | Active since May 9 | reference benchmark — canonical pricing/execution stack, no overrides — [weekly](instances/canonical/reports/weekly/) · [monthly](instances/canonical/reports/monthly/) |
+| `full_overrides` | Active since May 9 | short-**CALL** leg of the primary combined book — [weekly](instances/full_overrides/reports/weekly/) · [monthly](instances/full_overrides/reports/monthly/) |
+| `put_full_overrides` | Active since Jul 13 | short-**PUT** leg, daily-only (near-ATM mechanical selection); combined with `full_overrides` forms the primary short-volatility book — [weekly](instances/put_full_overrides/reports/weekly/) · [monthly](instances/put_full_overrides/reports/monthly/) |
+
+_Primary strategy of interest: the **combined** `full_overrides` (CALL) + `put_full_overrides` (PUT) short-volatility book, evaluated against the `canonical` reference. Combined call+put figures, when shown, are analytical overlays of these independently-run instances, not a single merged book._
+
+**Retired / frozen instances.** Five earlier baseline and experimental instances — `legacy_v2.1` (the original PT v2 baseline, includes the PM-001 window), `partial_overrides`, and the `partial_clean` · `partial_k2_2pct` · `partial_k2_5pct` short-call-spread trio — were **frozen on 2026-07-30**. Their historical event streams, timestamps and reports remain in the repository under `instances/<id>/` for audit continuity (see each folder's `RETIRED.md`), but they no longer receive new events. They are not part of the current track record and are excluded from the active showcase above.
 
 ### Performance snapshot — canonical instance, daily horizon
 
@@ -112,6 +113,26 @@ Six layers of cryptographic and methodological protection. The detailed step-by-
 
 No single layer is sufficient on its own. Together, they form a defense-in-depth that would require compromise of multiple independent systems (GitHub, Bitcoin blockchain, Deribit, any auditor's own clone) to defeat.
 
+### Verify with an AI assistant (no Git or cryptography required)
+
+If you are not comfortable with Git, the command line, or cryptographic tools, you can still get an independent read on this repository using a general-purpose AI assistant that can browse the web (for example ChatGPT, Claude, or Gemini with web access enabled). This is an **accessibility aid, not a cryptographic proof** — an AI can read the public data and re-add the numbers for you, but the hard guarantees still come from the manual steps in [`VERIFY.md`](VERIFY.md). Treat the AI as a well-read assistant that can make mistakes: ask it to show its work and cite the exact files it read.
+
+Copy the prompt below into your assistant of choice:
+
+> You are helping me independently verify a public paper-trading track record before I decide whether to trust it. The data lives in a public GitHub repository at https://github.com/dradicchi/polya-papertrading-log — it records a systematic short-volatility options strategy on Bitcoin, one appended event per trade.
+>
+> Please do the following, explaining each step in plain language for a non-technical reader:
+> 1. Read `README.md` and `SCHEMA.md` and summarize in one paragraph what this repository is and what it claims.
+> 2. Open the main benchmark stream at `instances/canonical/events.jsonl` (and `instances/full_overrides/events.jsonl` if you can). Describe what an entry event and an exit event look like in plain terms.
+> 3. From the raw exit events alone, independently add up the net profit-and-loss and count winning vs losing trades. Compare your totals against the latest published report under `instances/canonical/reports/`. Do they match? Show your arithmetic.
+> 4. If you can access the file's GitHub commit history, check whether `instances/canonical/events.jsonl` is only ever *added to* (append-only) or whether past lines were edited or deleted. Explain what you find.
+> 5. In plain language, explain what the `timestamps/` OpenTimestamps proofs and the signed commits are meant to guarantee, and how a technical person would check them.
+> 6. Finally, list clearly: (a) anything inconsistent or that looks like a red flag, and (b) everything you could NOT verify yourself and would need a human or a specialized tool for.
+>
+> Be skeptical and precise. If you cannot open a file, say so instead of guessing. Do not accept the repository's own claims at face value — check them against the raw data wherever you can.
+
+What this gives you: a plain-language orientation, an independent recomputation of the headline P&L, and a first-pass integrity check — with nothing to install. What it does **not** replace: the deterministic `verify.py` recomputation, the Git signature check, and the OpenTimestamps Bitcoin-anchor check in [`VERIFY.md`](VERIFY.md), which are the actual cryptographic guarantees.
+
 ### Signing key
 
 - **Ed25519 SSH key** with fingerprint `SHA256:Xp/CnXQhSmdpBRLWhoOXENkBc3FRkMIJeOBFh+XJKUM`
@@ -167,7 +188,7 @@ polya-papertrading-log/
 - The `instances/<id>/events.jsonl` streams are the canonical machine-readable source of truth (the root `events.jsonl` is the frozen `legacy_v2.1` baseline). Every other file in the repository is a view of these streams. If any file disagrees, the instance event stream is correct.
 - `positions/open.json` is **rewritten** with each event (it is a projection, not history). Its content is reproducible from replaying the event streams.
 - `sessions/` and `reports/` are generated artifacts — convenience renderings, not authoritative.
-- `instances/` segregates the parallel parameter configurations: `canonical`, `full_overrides` and `partial_overrides` (introduced May 9, 2026), the `partial_clean` / `partial_k2_2pct` / `partial_k2_5pct` short-call-spread trio (introduced June 9, 2026), `put_full_overrides` — the first short-**put** book, daily-only, near-ATM mechanical selection (introduced July 13, 2026) — and the frozen `legacy_v2.1` baseline — eight streams in total. Combined call+put figures, when shown, are analytical overlays of independently-run instances, not a single merged book (disclaimer #3 still holds: all-option, no perpetual hedge).
+- `instances/` holds the three active streams that make up the current track record: `canonical` (reference benchmark) and the `full_overrides` (CALL) + `put_full_overrides` (PUT) legs of the primary combined short-volatility book. Combined call+put figures, when shown, are analytical overlays of these independently-run instances, not a single merged book (disclaimer #3 still holds: all-option, no perpetual hedge). Five earlier streams — `legacy_v2.1`, `partial_overrides`, `partial_clean`, `partial_k2_2pct`, `partial_k2_5pct` — were **frozen on 2026-07-30** and are retained under `instances/<id>/` for audit continuity only (each carries a `RETIRED.md`); they are not part of the active track record.
 
 ---
 

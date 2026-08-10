@@ -1,0 +1,11 @@
+[
+  {
+    "event_id": "947668f84d5b9e6a",
+    "horizon": "daily",
+    "instrument": "BTC-12AUG26-64000-P",
+    "ts_entry": "2026-08-10T21:33:37.687Z",
+    "exec_btc": 0.0055,
+    "im_btc": 0.148977,
+    "exit_target_btc": 0.00055
+  }
+]

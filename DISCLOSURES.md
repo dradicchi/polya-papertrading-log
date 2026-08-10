@@ -19,6 +19,34 @@ values or model parameters.
 
 ---
 
+## 2026-08-10: New instance — `full_combined_daily` (merged CALL+PUT book)
+
+Not a correction — a new live instance, disclosed for completeness of the
+audit trail.
+
+A new primary instance, `full_combined_daily`, went live on 2026-08-10. It is
+the first **genuinely merged** short-volatility book: a short-CALL leg and a
+short-PUT leg traded under a single event stream (`instances/full_combined_daily/`),
+daily-only. Previously the combined CALL+PUT figures shown in analyses were
+**analytical overlays** of two independently-run instances; this instance
+materializes that book as one signed, timestamped ledger.
+
+- **Legs are independent (OR/PLUS):** each leg opens a position only when it has
+  an eligible candidate in the current regime; neither requires the other. In a
+  calm/falling-vol regime the CALL leg can be dry (no rich premium) while the PUT
+  leg trades, and vice versa.
+- **Shared exposure controls:** the two legs share the instance's daily
+  per-bucket entry cap and its capital pot — the merged book caps *total*
+  exposure, it does not deploy the sum of two independent books.
+- **Scope:** daily horizon only, for both legs.
+- The standalone `full_overrides` (CALL) and `put_full_overrides` (PUT) legs
+  remain published so the merged book can be decomposed.
+
+No methodology changed for any existing instance. The event stream is
+append-only and OpenTimestamped from genesis like every other instance.
+
+---
+
 ## 2026-04-15 (session 48): Universe alignment
 
 ### Affected window

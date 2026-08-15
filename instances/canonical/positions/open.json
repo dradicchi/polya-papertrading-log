@@ -1,14 +1,5 @@
 [
   {
-    "event_id": "ca9477aef6c1189a",
-    "horizon": "monthly",
-    "instrument": "BTC-28AUG26-68000-C",
-    "ts_entry": "2026-07-01T14:45:06.828Z",
-    "exec_btc": 0.017,
-    "im_btc": 0.1,
-    "exit_target_btc": 0.0017000000000000001
-  },
-  {
     "event_id": "68b002564e62cf7a",
     "horizon": "weekly",
     "instrument": "BTC-21AUG26-75000-C",
